@@ -1,9 +1,10 @@
-const Doctor = require("../models/doctorModel");
+import DOCTOR_MODEL from '../models/doctorModel.js'
 
 // CREATE doctor
-const createDoctor = async (req, res) => {
+export const createDoctor = async (req, res) => {
   try {
-    const doctor = await Doctor.create(req.body);
+    const doctor = await DOCTOR_MODEL.create(req.body);
+    // await doctor.save()
     res.status(201).json(doctor);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -11,9 +12,9 @@ const createDoctor = async (req, res) => {
 };
 
 // GET all doctors
-const readDoctor = async (req, res) => {
+export const getAllDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find();
+    const doctors = await DOCTOR_MODEL.find();
     res.json(doctors);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -21,9 +22,9 @@ const readDoctor = async (req, res) => {
 };
 
 // GET single doctor
-const readSingle = async (req, res) => {
+export const getSingleDoctor = async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
+    const doctor = await DOCTOR_MODEL.findById(req.params.id);
     if (!doctor) return res.status(404).json({ message: "Doctor not found" });
     res.json(doctor);
   } catch (err) {
@@ -32,9 +33,9 @@ const readSingle = async (req, res) => {
 };
 
 // UPDATE doctor
-const updateDoctor = async (req, res) => {
+export const updateDoctor = async (req, res) => {
   try {
-    const doctor = await Doctor.findByIdAndUpdate(req.params.id, req.body, {
+    const doctor = await DOCTOR_MODEL.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!doctor) return res.status(404).json({ message: "Doctor not found" });
@@ -45,9 +46,9 @@ const updateDoctor = async (req, res) => {
 };
 
 // DELETE doctor
-const deleteDoctor = async (req, res) => {
+export const deleteDoctor = async (req, res) => {
   try {
-    const doctor = await Doctor.findByIdAndDelete(req.params.id);
+    const doctor = await DOCTOR_MODEL.findByIdAndDelete(req.params.id);
     if (!doctor) return res.status(404).json({ message: "Doctor not found" });
     res.json({ message: "Doctor deleted" });
   } catch (err) {
@@ -55,10 +56,3 @@ const deleteDoctor = async (req, res) => {
   }
 };
 
-module.exports = {
-  createDoctor,
-  readDoctor,
-  readSingle,
-  updateDoctor,
-  deleteDoctor,
-};
