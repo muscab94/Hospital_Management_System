@@ -32,7 +32,7 @@ export default function SectionTwo() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
         >
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">About Us</h2>
+          <h2 className="text-3xl font-bold mt-5 text-gray-800 mb-4">About Us</h2>
           <p className="text-gray-600 mb-6">
             Dolor iure expedita id fuga asperiores qui sunt consequatur minima.
             Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam
@@ -42,14 +42,14 @@ export default function SectionTwo() {
 
           {/* Features */}
           <div         
-        className="space-y-6">
+        className="space-y-12">
             <div className="flex items-start gap-4">
-              <FaFlask className="text-blue-600 text-3xl" />
+              <FaFlask className="text-blue-600 text-5xl" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-xl font-bold text-gray-800">
                   Ullamco laboris nisi ut aliquip consequat
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-[0.9em]">
                   Magni facilis facilis repellendus cum excepturi quaerat
                   praesentium libre trade
                 </p>
@@ -57,12 +57,12 @@ export default function SectionTwo() {
             </div>
 
             <div className="flex items-start gap-4">
-              <FaHospital className="text-blue-600 text-3xl" />
+              <FaHospital className="text-blue-600 text-5xl" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-xl font-bold text-gray-800">
                   Magnam soluta odio exercitationem reprehenderit
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-[0.9em]">
                   Quo totam dolorum at pariatur aut distinctio dolorum laudantium
                   illo direna pasata redi
                 </p>
@@ -70,12 +70,12 @@ export default function SectionTwo() {
             </div>
 
             <div className="flex items-start gap-4">
-              <FaHeart className="text-blue-600 text-3xl" />
+              <FaHeart className="text-blue-600 text-5xl" />
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-xl font-bold text-gray-800">
                   Voluptatem et qui exercitationem
                 </h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-[0.9em]">
                   Et velit et eos maiores est tempora et quos dolorem autem
                   tempora incidunt maxime veniam
                 </p>
