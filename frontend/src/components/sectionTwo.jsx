@@ -1,5 +1,6 @@
 import { FaFlask, FaHospital, FaHeart } from "react-icons/fa";
 import img from "../images/about.jpg"
+import { motion } from "framer-motion";
 
 export default function SectionTwo() {
   return (
@@ -7,11 +8,15 @@ export default function SectionTwo() {
       <div className="grid md:grid-cols-2 gap-10 items-center">
         {/* Left Image */}
         <div className="relative">
-          <img
-            src={img}
-            alt="Doctors"
-            className="rounded-lg shadow-lg"
-          />
+       <motion.img
+        src={img}
+        alt="Doctors"
+        className="rounded-lg shadow-lg"
+            initial={{ opacity: 0, y: 100 }}  
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+       />
           {/* Play Button Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
             <button className="bg-blue-600 text-white w-16 h-16 flex items-center justify-center rounded-full shadow-lg hover:bg-blue-700 transition">
@@ -21,7 +26,12 @@ export default function SectionTwo() {
         </div>
 
         {/* Right Content */}
-        <div>
+        <motion.div   
+            initial={{ opacity: 0, y: 100 }}  
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }}
+        >
           <h2 className="text-3xl font-bold text-gray-800 mb-4">About Us</h2>
           <p className="text-gray-600 mb-6">
             Dolor iure expedita id fuga asperiores qui sunt consequatur minima.
@@ -31,7 +41,8 @@ export default function SectionTwo() {
           </p>
 
           {/* Features */}
-          <div className="space-y-6">
+          <div         
+        className="space-y-6">
             <div className="flex items-start gap-4">
               <FaFlask className="text-blue-600 text-3xl" />
               <div>
@@ -71,7 +82,7 @@ export default function SectionTwo() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
