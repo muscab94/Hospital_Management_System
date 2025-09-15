@@ -1,4 +1,4 @@
-import PRESCRIPTION_MODEL from "../models/prescriptionModel.js"
+import PRESCRIPTION_MODEL from "../models/prescriptionModel"
 
 // CREATE prescription
 export const createPrescription = async (req, res) => {
