@@ -1,7 +1,7 @@
 import { FaFlask, FaHospital, FaHeart } from "react-icons/fa";
-import img from "../images/about.jpg"
+// import img from "../images/about.jpg"
 import { motion } from "framer-motion";
-
+import assets from "../assets";
 export default function SectionTwo() {
   return (
     <section className="w-full py-12 px-6 md:px-20 bg-white">
@@ -9,7 +9,7 @@ export default function SectionTwo() {
         {/* Left Image */}
         <div className="relative">
        <motion.img
-        src={img}
+        src={assets.aboutImg}
         alt="Doctors"
         className="rounded-lg shadow-lg"
             initial={{ opacity: 0, y: 100 }}  
