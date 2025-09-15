@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const prescriptionSchema = new mongoose.Schema(
   {
@@ -25,7 +25,7 @@ const prescriptionSchema = new mongoose.Schema(
     notes: { type: String }
   },
   { timestamps: true }
-);
+)
 
-const PRESCRIPTION_MODEL = mongoose.model("prescription", prescriptionSchema);
-export default PRESCRIPTION_MODEL;
+const PRESCRIPTION_MODEL = mongoose.model("prescription", prescriptionSchema)
+export default PRESCRIPTION_MODEL

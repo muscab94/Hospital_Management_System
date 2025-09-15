@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const patientSchema = new mongoose.Schema(
   {
@@ -14,10 +14,10 @@ const patientSchema = new mongoose.Schema(
     emergencyContact: {
       name: { type: String },
       phone: { type: String },
-    },
+    }
   },
   { timestamps: true }
 );
-const PATIENT_MODEL =  mongoose.model("patient", patientSchema);
+const PATIENT_MODEL =  mongoose.model("patient", patientSchema)
 export default PATIENT_MODEL
 
