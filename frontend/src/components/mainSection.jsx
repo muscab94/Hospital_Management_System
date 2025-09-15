@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import sectionOneBg from "../assets/doctor-s-hand-holding-stethoscope-closeup.jpg";
 import sectionOneBg2 from "../assets/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg";
 import SectionTwo from "./sectionTwo";
+import SectionThree from "./sectionThree";
 
 const slides = [
   {
@@ -88,6 +89,7 @@ function MainSection() {
       </button>
     </section>
        <SectionTwo/>
+       <SectionThree/>
      </>
   );
    
