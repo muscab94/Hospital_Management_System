@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import sectionOneBg from "../assets/doctor-s-hand-holding-stethoscope-closeup.jpg";
 import sectionOneBg2 from "../assets/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg";
+import SectionTwo from "./sectionTwo";
 
 const slides = [
   {
@@ -21,7 +22,8 @@ const slides = [
     id: 3,
     title: "Your Health, Our Priority",
     subtitle: "Trusted care from experienced professionals",
-    image: "/assets/hospital-bg.jpg",
+    image: sectionOneBg
+    // "/assets/hospital-bg.jpg",
   },
 ];
 
@@ -36,7 +38,8 @@ function MainSection() {
     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  return (
+  return  (
+    <>
     <section className="relative w-full h-[500px] overflow-hidden">
 <AnimatePresence>
   <motion.div
@@ -84,7 +87,10 @@ function MainSection() {
         <ChevronRight className="w-6 h-6 text-blue-800" />
       </button>
     </section>
+       <SectionTwo/>
+     </>
   );
+   
 }
 
 export default MainSection;
