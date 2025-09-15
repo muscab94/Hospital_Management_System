@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const contactSchema = new mongoose.Schema(
   {
@@ -20,10 +20,10 @@ const contactSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-    }
+    },
   },
   { timestamps: true }
-)
+);
 
-const CONTACT_MODEL = mongoose.model("contact", contactSchema)
-export default CONTACT_MODEL
+const CONTACT_MODEL = mongoose.model("Contact", contactSchema);
+export default CONTACT_MODEL;
