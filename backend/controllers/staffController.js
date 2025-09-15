@@ -1,4 +1,4 @@
-import STAFF_MODEL from "../models/staffModel";
+import STAFF_MODEL from "../models/staffModel.js";
 
 // CREATE staff
 export const createStaff = async (req, res) => {
