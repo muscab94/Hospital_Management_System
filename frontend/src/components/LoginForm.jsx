@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [user, setuser] = useState({
+    userName: "",
+    role: "",
+  });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -21,11 +25,20 @@ function LoginForm() {
 
     try {
       // Send login request to your backend
-      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
 
+      const userData = {
+        name: res.data.data.name,
+        role: res.data.data.role,
+        id: res.data.data._id
+      };
+      setuser(userData);
       // Save JWT token in localStorage
       localStorage.setItem("token", res.data.token);
-
+      localStorage.setItem("user", JSON.stringify(userData));
       // Redirect to dashboard (or homepage)
       navigate("/dashboard");
     } catch (err) {
