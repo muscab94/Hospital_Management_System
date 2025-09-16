@@ -99,12 +99,12 @@ function MainSection() {
        <SectionTwo/>
        <SectionThree/>
        <SectionFour/>
-       <SectionAppointment/>
+       {/* <SectionAppointment/> */}
        <SectionDepartment/>
        <SectionDoctors/>
        <Testimonials/>
-       <ContactForm/>
-       <Footer/>
+       {/* <ContactForm/> */}
+       {/* <Footer/> */}
      </>
   );
    
