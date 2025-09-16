@@ -74,25 +74,21 @@ export default function Header() {
         <h1 className="text-2xl font-bold text-gray-800">Cumaan Hospital</h1>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-6 items-center  text-gray-700">
+        <ul className="hidden md:flex gap-7 text-[20px] ml-12 items-center  text-gray-700">
           <li className="hover:text-blue-600 cursor-pointer">Home</li>
           <li className="hover:text-blue-600 cursor-pointer">About</li>
           <li className="hover:text-blue-600 cursor-pointer">Services</li>
           <li className="hover:text-blue-600 cursor-pointer">Doctors</li>
           <li className="hover:text-blue-600 cursor-pointer">Contact</li>
 
-          {/* Login Icon */}
-          <li className="text-blue-600 cursor-pointer text-xl">
-            <FaUser />
-          </li>
 
-          {/* Button */}
-          <li>
-            <button className="bg-blue-60 text-black -ml-3 bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-700">
-               Login
-            </button>
-          </li>
         </ul>
+            
+                  {/* Button */}
+            <button className="bg-blue-60 text-black -ml-3 bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-700">
+               Make an appointment
+            </button>
+          
 
         {/* Mobile Hamburger */}
         <button

@@ -5,6 +5,7 @@ import sectionOneBg from "../assets/doctor-s-hand-holding-stethoscope-closeup.jp
 import sectionOneBg2 from "../assets/young-asian-female-dentist-white-coat-posing-clinic-equipment.jpg";
 import SectionTwo from "./sectionTwo";
 import SectionThree from "./sectionThree";
+import SectionFour from "./sectionFour";
 
 const slides = [
   {
@@ -90,6 +91,7 @@ function MainSection() {
     </section>
        <SectionTwo/>
        <SectionThree/>
+       <SectionFour/>
      </>
   );
    

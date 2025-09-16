@@ -4,7 +4,7 @@ import {
   getAllContacts,
   getContactById,
   deleteContact,
-} from "../controllers/contactController.js"
+} from "../controllers/conatctController.js"
 
 import { authMiddleware, authorizeRoles } from "../middleware/authMiddleware.js"
 
