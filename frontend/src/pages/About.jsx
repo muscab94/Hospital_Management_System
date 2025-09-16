@@ -17,9 +17,9 @@ const About = () => {
           Providing compassionate healthcare services with state-of-the-art
           facilities and expert medical professionals.
         </p>
-        <button className="mt-6 px-8 py-3 bg-white text-blue-700 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
+        <Link to= "/Appointment"><button className="mt-6 px-8 py-3 bg-white text-blue-700 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
           Book Appointment
-        </button>
+        </button></Link>
       </section>
 
       {/* 2. About Us Section */}
@@ -47,8 +47,8 @@ const About = () => {
       {/* 3. Our Services Section */}
       <section className="py-16 bg-gray-0 px-6">
         <div>
-                    <SectionFour/>
-                   </div>
+              <SectionFour/>
+       </div>
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
           
         </h2>

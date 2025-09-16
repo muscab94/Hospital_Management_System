@@ -13,7 +13,11 @@ import appointmentRoutes from './routes/appointmentRouter.js';
 import medicalRecordRoutes from './routes/medicalRecordRouter.js';
 import staffRoutes from './routes/userRouter.js';
 import reportRoutes from './routes/reportRouter.js'
+<<<<<<< HEAD
 import departmentRoutes from './routes/departmentRouter.js'
+=======
+import contactRouter from "./routes/contactRouter.js"
+>>>>>>> c0cb14d243b51d81e66e572799f4a4b1ebb05a1a
 
 dotenv.config()
 
@@ -59,6 +63,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/medical-records', medicalRecordRoutes);
 app.use('/api/staff', staffRoutes);
 app.use('/api/reports', reportRoutes);
+app.use("/api/contact", contactRouter)
 
 // Welcome route
 app.get('/', (req, res) => {
