@@ -6,6 +6,8 @@ import sectionOneBg2 from "../assets/young-asian-female-dentist-white-coat-posin
 import SectionTwo from "./sectionTwo";
 import SectionThree from "./sectionThree";
 import SectionFour from "./sectionFour";
+import Appointments from "../pages/Appointments";
+import SectionAppointment from "./Appointment";
 
 const slides = [
   {
@@ -92,6 +94,7 @@ function MainSection() {
        <SectionTwo/>
        <SectionThree/>
        <SectionFour/>
+       <SectionAppointment/>
      </>
   );
    

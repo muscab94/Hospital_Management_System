@@ -10,6 +10,7 @@ import Patients from "./pages/Patients"
 import Appointments from "./pages/Appointments"
 import Staffs from "./pages/Staffs"
 import Reports from "./pages/Reports"
+import MedicalRecords from "./pages/MedicalRecords"
 function App(){
 
   const router = createBrowserRouter(
@@ -24,8 +25,8 @@ function App(){
         <Route path="/dashboard" element={<DashBoardLayout />}>
           <Route index element={<Dashboard/>} />
           <Route path="patients" element={<Patients/>} />
-          <Route path="appointments" element={<Patients/>} />
-          <Route path="medical-records" element={<Appointments/>} />
+          <Route path="appointments" element={<Appointments/>} />
+          <Route path="medical-records" element={<MedicalRecords/>} />
           <Route path="staffs" element={<Staffs/>} />
           <Route path="reports" element={<Reports/>} />
         </Route>
