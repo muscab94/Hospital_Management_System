@@ -4,11 +4,11 @@ import { Outlet } from 'react-router-dom'
 
 function DashBoardLayout() {
   return (
-    <div className='flex '>
-        <div className='w-72 h-screen'>
+    <div className='flex h-screen'>
+        <div className='w-72 h-full'>
           <SideBar />
         </div>
-        <div className='flex-1'>
+        <div className='flex-1 h-screen overflow-auto'>
           <Outlet />
         </div>
     </div>

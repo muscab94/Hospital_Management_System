@@ -13,6 +13,7 @@ import appointmentRoutes from './routes/appointmentRouter.js';
 import medicalRecordRoutes from './routes/medicalRecordRouter.js';
 import staffRoutes from './routes/userRouter.js';
 import reportRoutes from './routes/reportRouter.js'
+import departmentRoutes from './routes/departmentRouter.js'
 
 dotenv.config()
 
@@ -53,6 +54,7 @@ app.use(express.urlencoded({ extended: false }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/departments', departmentRoutes)
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/medical-records', medicalRecordRoutes);
 app.use('/api/staff', staffRoutes);

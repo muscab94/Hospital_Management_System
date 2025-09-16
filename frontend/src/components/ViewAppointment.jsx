@@ -19,6 +19,7 @@ function ViewAppointment() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log(res.data)
         setAppointment(res.data.data);
       } catch (err) {
         console.error("Error fetching appointment:", err);
@@ -70,16 +71,16 @@ function ViewAppointment() {
             </p>
             <p>
               <span className="font-medium">Name:</span>{" "}
-              {appointment.patient?.firstName} {appointment.patient?.lastName}
+              {appointment.patient?.fullName}
             </p>
             <p>
               <span className="font-medium">Phone:</span>{" "}
               {appointment.patient?.phone}
             </p>
-            <p>
+            {/* <p>
               <span className="font-medium">Email:</span>{" "}
               {appointment.patient?.email}
-            </p>
+            </p> */}
             <p>
               <span className="font-medium">Gender:</span>{" "}
               {appointment.patient?.gender}

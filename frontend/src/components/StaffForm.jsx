@@ -30,7 +30,7 @@ export default function StaffForm() {
       if (!id) return;
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/${id}`,
+          `http://localhost:5000/api/staff/${id}`,
           getHeaders()
         );
         setFormData({

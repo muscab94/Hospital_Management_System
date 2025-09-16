@@ -19,9 +19,9 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
-import { getHeaders } from "../services/staffService";
+import { getHeaders } from "./staffService";
 
-const Reports = () => {
+const reports = () => {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -174,4 +174,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default reports;

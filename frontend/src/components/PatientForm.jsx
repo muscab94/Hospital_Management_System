@@ -8,6 +8,7 @@ function PatientForm() {
   const { id } = useParams(); // get id from URL (for edit)
   const patientId = id;
   const [loading, setLoading] = useState(false);
+  const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -18,15 +19,30 @@ function PatientForm() {
     bloodGroup: "",
     allergies: [""],
     medicalHistory: [""],
+    department: "", // added department field
     isActive: true,
   });
+
+  // Fetch departments
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:5000/api/departments", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setDepartments(res.data.data);
+      } catch (err) {
+        console.error("Error fetching departments:", err);
+      }
+    };
+    fetchDepartments();
+  }, []);
 
   // Fetch patient data if editing
   useEffect(() => {
     const fetchPatient = async () => {
-      console.log(!patientId);
       if (!patientId) return; // skip if adding
-      console.log("seaching......");
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
@@ -36,7 +52,6 @@ function PatientForm() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(res.data.data);
         setFormData(res.data.data);
       } catch (err) {
         console.error("Error fetching patient:", err);
@@ -73,7 +88,7 @@ function PatientForm() {
         : "http://localhost:5000/api/patients";
       const method = patientId ? "PUT" : "POST";
 
-      const res = await axios({
+      await axios({
         url,
         method,
         headers: { Authorization: `Bearer ${token}` },
@@ -99,9 +114,12 @@ function PatientForm() {
           <h2 className="text-2xl font-bold mb-6">
             {patientId ? "Edit Patient" : "Add New Patient"}
           </h2>
-          <button className="px-6 py-1.5 bg-black text-white text-xl 
-          hover:scale-105 rounded-3xl"
-          onClick={() => navigate("/dashboard/patients")}>Back</button>
+          <button
+            className="px-6 py-1.5 bg-black text-white text-xl hover:scale-105 rounded-3xl"
+            onClick={() => navigate("/dashboard/patients")}
+          >
+            Back
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -139,7 +157,9 @@ function PatientForm() {
                 type="date"
                 name="dateOfBirth"
                 value={
-                  formData.dateOfBirth ? formData.dateOfBirth.split("T")[0] : ""
+                  formData.dateOfBirth
+                    ? formData.dateOfBirth.split("T")[0]
+                    : ""
                 }
                 onChange={handleChange}
                 className="mt-1 w-full border p-2 rounded"
@@ -161,6 +181,25 @@ function PatientForm() {
                 <option>Other</option>
               </select>
             </div>
+          </div>
+
+          {/* Department */}
+          <div>
+            <label className="block text-sm font-medium">Department</label>
+            <select
+              name="department"
+              value={formData.department || ""}
+              onChange={handleChange}
+              className="mt-1 w-full border p-2 rounded"
+              required
+            >
+              <option value="">Select...</option>
+              {departments.map((dept) => (
+                <option key={dept._id} value={dept._id}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Address */}

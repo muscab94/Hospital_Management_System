@@ -113,6 +113,7 @@ function PatientDetail() {
             ? new Date(patient.createdAt).toLocaleDateString()
             : "N/A"}
         </div>
+        
       </div>
     </div>
   );

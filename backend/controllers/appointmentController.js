@@ -38,7 +38,7 @@ export const getAppointments = asyncHandler(async (req, res) => {
   }
 
   const appointments = await Appointment.find(query)
-    .populate('patient', 'firstName lastName phone patientId')
+    .populate('patient', 'fullName phone patientId')
     .populate('doctor', 'name specialty')
     .populate('scheduledBy', 'name')
     .sort({ appointmentDate: 1, appointmentTime: 1 })
@@ -65,7 +65,7 @@ export const getAppointments = asyncHandler(async (req, res) => {
 // @access  Private
 export const getAppointment = asyncHandler(async (req, res) => {
   const appointment = await Appointment.findById(req.params.id)
-    .populate('patient', 'firstName lastName phone email patientId dateOfBirth gender')
+    .populate('patient', 'fullName phone email patientId dateOfBirth gender')
     .populate('doctor', 'name specialty phone email')
     .populate('scheduledBy', 'name email');
 

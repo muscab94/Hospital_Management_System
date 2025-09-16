@@ -29,6 +29,7 @@ import Service from "./pages/service";
 import Department from "./pages/Department";
 import DoctorPages from "./pages/DoctorPages";
 import StaffForm from "./components/StaffForm";
+import StaffView from "./components/StafView";
 
 function App() {
   const router = createBrowserRouter(
@@ -59,6 +60,7 @@ function App() {
           <Route path="staffs" element={<Staffs />} />
           <Route path="staffs/add" element={<StaffForm />} />
           <Route path="staffs/edit/:id" element={<StaffForm />} />
+          <Route path="staffs/view/:id" element={<StaffView />} />
           <Route path="reports" element={<ReportPage />} />
         </Route>
       </>

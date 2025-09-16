@@ -26,4 +26,4 @@ export const createStaff = (data) =>
 
 // Update staff (admin updating staff by ID)
 export const updateStaff = (id, data) =>
-  axios.put(`http://localhost:5000/api/users/${id}`, data, getHeaders());
+  axios.put(`http://localhost:5000/api/staff/${id}`, data, getHeaders());

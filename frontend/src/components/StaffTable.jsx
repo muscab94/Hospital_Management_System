@@ -6,7 +6,7 @@ import StaffForm from "./StaffForm";
 import { useNavigate } from "react-router-dom";
 
 export default function StaffTable() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [staff, setStaff] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -16,7 +16,7 @@ export default function StaffTable() {
   const [totalPages, setTotalPages] = useState(1);
 
   const [selectedStaff, setSelectedStaff] = useState(null);
-//   const [showForm, setShowForm] = useState(false);
+  //   const [showForm, setShowForm] = useState(false);
 
   const loadStaff = async () => {
     try {
@@ -38,24 +38,26 @@ export default function StaffTable() {
   }, [page, search, role, isActive]);
 
   const handleDeactivate = async (id) => {
-    if (!window.confirm("Are you sure you want to deactivate this staff member?")) return;
+    if (
+      !window.confirm("Are you sure you want to deactivate this staff member?")
+    )
+      return;
     await deactivateStaffMember(id);
     loadStaff();
   };
 
+  const handleView = (staff) => {
+    navigate(`/dashboard/staffs/view/${staff._id}`);
+  };
+
   const handleEdit = (staff) => {
     setSelectedStaff(staff);
-    navigate(`/dashboard/staffs/edit/${staff._id}`)
+    navigate(`/dashboard/staffs/edit/${staff._id}`);
   };
 
   const handleAdd = () => {
     setSelectedStaff(null);
-    navigate(`/dashboard/staffs/add`)
-  };
-
-  const handleCloseForm = () => {
-    setShowForm(false);
-    loadStaff();
+    navigate(`/dashboard/staffs/add`);
   };
 
   return (
@@ -84,7 +86,9 @@ export default function StaffTable() {
             className="border p-2 rounded"
             value={isActive ?? ""}
             onChange={(e) =>
-              setIsActive(e.target.value === "" ? undefined : e.target.value === "true")
+              setIsActive(
+                e.target.value === "" ? undefined : e.target.value === "true"
+              )
             }
           >
             <option value="">All Status</option>
@@ -119,9 +123,14 @@ export default function StaffTable() {
               <td className="border px-4 py-2">{s.email}</td>
               <td className="border px-4 py-2">{s.role}</td>
               <td className="border px-4 py-2">{s.phone}</td>
-              <td className="border px-4 py-2">{s.isActive ? "Active" : "Inactive"}</td>
+              <td className="border px-4 py-2">
+                {s.isActive ? "Active" : "Inactive"}
+              </td>
               <td className="border px-4 py-2 flex gap-2">
-                <Eye className="cursor-pointer text-blue-500" />
+                <Eye
+                  className="cursor-pointer text-blue-500"
+                  onClick={() => handleView(s)}
+                />
                 <Pencil
                   className="cursor-pointer text-green-500"
                   onClick={() => handleEdit(s)}
@@ -144,7 +153,9 @@ export default function StaffTable() {
         >
           Previous
         </button>
-        <span>Page {page} of {totalPages}</span>
+        <span>
+          Page {page} of {totalPages}
+        </span>
         <button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}
