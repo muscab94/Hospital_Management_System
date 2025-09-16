@@ -8,6 +8,7 @@ import SectionThree from "./sectionThree";
 import SectionFour from "./sectionFour";
 import Appointments from "../pages/Appointments";
 import SectionAppointment from "./Appointment";
+import SectionDepartment from "./SectionDepartment";
 
 const slides = [
   {
@@ -95,6 +96,7 @@ function MainSection() {
        <SectionThree/>
        <SectionFour/>
        <SectionAppointment/>
+       <SectionDepartment/>
      </>
   );
    

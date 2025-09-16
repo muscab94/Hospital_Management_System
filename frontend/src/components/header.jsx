@@ -36,6 +36,7 @@ export default function Header() {
           <li className="hover:text-blue-600 cursor-pointer">Home</li>
           <li className="hover:text-blue-600 cursor-pointer">About</li>
           <li className="hover:text-blue-600 cursor-pointer">Services</li>
+          <li className="hover:text-blue-600 cursor-pointer">Departments</li>
           <li className="hover:text-blue-600 cursor-pointer">Doctors</li>
           <li className="hover:text-blue-600 cursor-pointer">Contact</li>
 
