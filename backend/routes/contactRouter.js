@@ -1,21 +1,29 @@
-// import express from "express"
-// import {
-//   createContact,
-//   getAllContacts,
-//   getContactById,
-//   deleteContact,
-// } from "../controllers/conatctController.js"
+import express from "express";
+import {
+  createContact,
+  getAllContacts,
+  getContactById,
+  deleteContact,
+} from "../controllers/conatctController.js";
 
-// import { authMiddleware, authorizeRoles } from "../middleware/authMiddleware.js"
+import { protect, authorize } from "../middleware/auth.js";
+import auditLog from "../middleware/auditLog.js";
 
-// const router = express.Router()
+const router = express.Router();
 
-// // PUBLIC route - anyone can send a message
-// router.post("/", createContact)
+// Public route - anyone can send a contact message
+router.post("/", auditLog("CREATE", "CONTACT"), createContact);
 
-// // PROTECTED routes (admin only)
-// router.get("/", authMiddleware, authorizeRoles("admin"), getAllContacts)
-// router.get("/:id", authMiddleware, authorizeRoles("admin"), getContactById)
-// router.delete("/:id", authMiddleware, authorizeRoles("admin"), deleteContact)
+// All routes below require authentication
+router.use(protect);
 
-// export default router
+router
+  .route("/")
+  .get(authorize("admin"), auditLog("VIEW", "CONTACT"), getAllContacts);
+
+router
+  .route("/:id")
+  .get(authorize("admin"), auditLog("VIEW", "CONTACT"), getContactById)
+  .delete(authorize("admin"), auditLog("DELETE", "CONTACT"), deleteContact);
+
+export default router;

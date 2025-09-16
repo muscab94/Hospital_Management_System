@@ -29,6 +29,7 @@ import Service from "./pages/service";
 import Department from "./pages/Department";
 import DoctorPages from "./pages/DoctorPages";
 import StaffForm from "./components/StaffForm";
+import ContactList from "./components/contactList";
 
 function App() {
   const router = createBrowserRouter(
@@ -42,6 +43,8 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/Department" element={<Department />} />
           <Route path="/doctor" element={<DoctorPages />} />
+          <Route path="/contactList" element={<ContactList/>} />
+          
         </Route>
         <Route path="/Login" element={<AuthLayout />}>
           <Route index element={<LoginForm />} />
