@@ -25,7 +25,7 @@ function SideBar() {
   }, []);
 
   return (
-    <div className="min-h-screen w-64 flex flex-col bg-blue-600 text-white shadow-lg">
+    <div className="min-h-screen w-64 fixed flex flex-col bg-blue-600 text-white shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-blue-400">
         <img
