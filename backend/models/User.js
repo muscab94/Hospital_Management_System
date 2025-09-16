@@ -1,44 +1,101 @@
 import mongoose from 'mongoose';
-const auditLogSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  action: {
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+// const { JWT_SECRET, JWT_EXPIRE } = require('../config/jwt');
+import {JWT_SECRET, JWT_EXPIRE }  from '../config/jwt.js';
+import dotenv from 'dotenv'
+
+
+dotenv.config()
+
+const userSchema = new mongoose.Schema({
+  name: {
     type: String,
-    required: [true, 'Action is required'],
+    required: [true, 'Please provide name'],
+    trim: true,
+    maxlength: [50, 'Name cannot be more than 50 characters']
+  },
+  email: {
+    type: String,
+    required: [true, 'Please provide email'],
+    unique: true,
+    lowercase: true,
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide valid email']
+  },
+  password: {
+    type: String,
+    required: [true, 'Please provide password'],
+    minlength: [6, 'Password must be at least 6 characters'],
+    select: false
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'doctor', 'receptionist', 'cashier', 'pharmacist'],
+    default: 'receptionist'
+  },
+  phone: {
+    type: String,
+    required: [true, 'Please provide phone number']
+  },
+  address: {
+    type: String,
+    required: [true, 'Please provide address']
+  },
+  employeeId: {
+    type: String,
+    unique: true,
+    required: [true, 'Please provide employee ID']
+  },
+   specialty: {
+    type: String,
     enum: [
-      'CREATE', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT',
-      'VIEW', 'SEARCH', 'EXPORT', 'IMPORT', 'BACKUP',
-      'PAYMENT_RECEIVED', 'PRESCRIPTION_ISSUED', 'APPOINTMENT_SCHEDULED'
-    ]
+      'Cardiology',
+      'Dermatology',
+      'Endocrinology',
+      'Gastroenterology',
+      'Neurology',
+      'Psychiatry',
+      'Surgical / Orthopedic',
+      'General / Pediatrics',
+      'Radiology / Oncology',
+      'Urology'
+    ],
+    required: function() { return this.role === 'doctor'; }
   },
-  resource: {
+  licenseNumber: {
     type: String,
-    required: [true, 'Resource is required'],
-    enum: [
-      'USER', 'PATIENT', 'APPOINTMENT', 'MEDICAL_RECORD',
-      'PRESCRIPTION', 'MEDICINE', 'BILL', 'PAYMENT', 'SYSTEM'
-    ]
+    required: function() { return this.role === 'doctor'; }
   },
-  resourceId: {
-    type: String,
-    required: [true, 'Resource ID is required']
+  isActive: {
+    type: Boolean,
+    default: true
   },
-  details: {
-    type: mongoose.Schema.Types.Mixed
-  },
-  ipAddress: String,
-  userAgent: String,
-  timestamp: {
+  createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-// Index for efficient querying
-auditLogSchema.index({ user: 1, timestamp: -1 });
-auditLogSchema.index({ resource: 1, resourceId: 1, timestamp: -1 });
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-const AUDITLOG_MODEL = mongoose.model('AuditLog', auditLogSchema);
-export default AUDITLOG_MODEL;
+// Generate JWT token
+userSchema.methods.getSignedJwtToken = function() {
+  console.log("Signing token with secret:", JWT_SECRET);
+  return jwt.sign({ id: this._id, role: this.role }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRE
+  });
+};
+
+// Match password
+userSchema.methods.matchPassword = async function(enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+const USER_MODEL = mongoose.model('User', userSchema);
+export default USER_MODEL;

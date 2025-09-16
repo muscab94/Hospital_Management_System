@@ -1,44 +1,75 @@
 import mongoose from 'mongoose';
-const auditLogSchema = new mongoose.Schema({
-  user: {
+
+const appointmentSchema = new mongoose.Schema({
+  appointmentId: {
+    type: String,
+    unique: true
+  },
+  patient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Patient',
+    required: [true, 'Patient is required']
+  },
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Doctor is required']
+  },
+  appointmentDate: {
+    type: Date,
+    required: [true, 'Appointment date is required']
+  },
+  appointmentTime: {
+    type: String,
+    required: [true, 'Appointment time is required']
+  },
+  duration: {
+    type: Number,
+    default: 30 // minutes
+  },
+  type: {
+    type: String,
+    enum: ['consultation', 'follow-up', 'check-up', 'emergency'],
+    default: 'consultation'
+  },
+  status: {
+    type: String,
+    enum: ['scheduled', 'confirmed', 'in-progress', 'completed', 'cancelled', 'no-show'],
+    default: 'scheduled'
+  },
+  reason: {
+    type: String,
+    required: [true, 'Reason for appointment is required']
+  },
+  notes: String,
+  priority: {
+    type: String,
+    enum: ['low', 'medium', 'high', 'urgent'],
+    default: 'medium'
+  },
+  scheduledBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  action: {
-    type: String,
-    required: [true, 'Action is required'],
-    enum: [
-      'CREATE', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT',
-      'VIEW', 'SEARCH', 'EXPORT', 'IMPORT', 'BACKUP',
-      'PAYMENT_RECEIVED', 'PRESCRIPTION_ISSUED', 'APPOINTMENT_SCHEDULED'
-    ]
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
-  resource: {
-    type: String,
-    required: [true, 'Resource is required'],
-    enum: [
-      'USER', 'PATIENT', 'APPOINTMENT', 'MEDICAL_RECORD',
-      'PRESCRIPTION', 'MEDICINE', 'BILL', 'PAYMENT', 'SYSTEM'
-    ]
-  },
-  resourceId: {
-    type: String,
-    required: [true, 'Resource ID is required']
-  },
-  details: {
-    type: mongoose.Schema.Types.Mixed
-  },
-  ipAddress: String,
-  userAgent: String,
-  timestamp: {
+  updatedAt: {
     type: Date,
     default: Date.now
   }
 });
 
-// Index for efficient querying
-auditLogSchema.index({ user: 1, timestamp: -1 });
-auditLogSchema.index({ resource: 1, resourceId: 1, timestamp: -1 });
+// Generate unique appointment ID
+appointmentSchema.pre('save', async function(next) {
+  if (!this.appointmentId) {
+    const count = await this.constructor.countDocuments();
+    this.appointmentId = `APP${String(count + 1).padStart(6, '0')}`;
+  }
+  this.updatedAt = Date.now();
+  next();
+});
 
-const AUDITLOG_MODEL = mongoose.model('AuditLog', auditLogSchema);
-export default AUDITLOG_MODEL;
+const APPOINTMENT_MODEL =  mongoose.model('Appointment', appointmentSchema);
+export default APPOINTMENT_MODEL;
