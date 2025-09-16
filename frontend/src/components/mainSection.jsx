@@ -9,6 +9,10 @@ import SectionFour from "./sectionFour";
 import Appointments from "../pages/Appointments";
 import SectionAppointment from "./Appointment";
 import SectionDepartment from "./SectionDepartment";
+import SectionDoctors from "./SectionDoctors";
+import Testimonials from "./Testinomial";
+import ContactForm from "./ContactForm";
+import Footer from "./Footer";
 
 const slides = [
   {
@@ -97,6 +101,10 @@ function MainSection() {
        <SectionFour/>
        <SectionAppointment/>
        <SectionDepartment/>
+       <SectionDoctors/>
+       <Testimonials/>
+       <ContactForm/>
+       <Footer/>
      </>
   );
    
