@@ -1,26 +1,47 @@
-import express from "express"
-import { authMiddleware, authorizeRoles } from "../middleware/authMiddleware.js"
+import express from 'express';
 import {
-  getAllPatients,
-  getPatientById,
+  getPatients,
+  getPatient,
   createPatient,
   updatePatient,
   deletePatient,
-} from "../controllers/patientController.js"
+  searchPatients,
+  getPatientStats
+} from '../controllers/patientController.js';
 
-const router = express.Router()
+import { protect, authorize } from '../middleware/auth.js';
+import auditLog from '../middleware/auditLog.js';
 
-// Admin & Doctor can create, update, delete patients
-router.post("/", authMiddleware, authorizeRoles("admin", "doctor"), createPatient)
-router.put("/:id", authMiddleware, authorizeRoles("admin", "doctor"), updatePatient)
-router.delete("/:id", authMiddleware, authorizeRoles("admin"), deletePatient)
+const router = express.Router();
 
-// All roles can view patients
-router.get("/", authMiddleware, authorizeRoles("admin", "doctor", "receptionist"), getAllPatients)
-router.get("/:id", authMiddleware, authorizeRoles("admin", "doctor", "receptionist"), getPatientById)
+// All routes require authentication
+router.use(protect);
 
-export default router
+router
+  .route('/')
+  .get(authorize('admin', 'doctor', 'receptionist'), getPatients)
+  .post(authorize('admin', 'receptionist'), auditLog('CREATE', 'PATIENT'), createPatient);
 
+router.get('/stats', authorize('admin', 'receptionist'), getPatientStats);
+router.get('/search/:term', authorize('admin', 'doctor', 'receptionist'), searchPatients);
 
-module.exports = router
+router
+  .route('/:id')
+  .get(authorize('admin', 'doctor', 'receptionist'), auditLog('VIEW', 'PATIENT'), getPatient)
+  .put(authorize('admin', 'receptionist'), auditLog('UPDATE', 'PATIENT'), updatePatient)
+  .delete(authorize('admin'), auditLog('DELETE', 'PATIENT'), deletePatient);
 
+// router
+//   .route("/")
+//   .get(getPatients) // no role restriction
+//   .post(auditLog("CREATE", "PATIENT"), createPatient);
+
+// router.get("/stats", getPatientStats);
+// router.get("/search/:term", searchPatients);
+
+// router
+//   .route("/:id")
+//   .get(auditLog("VIEW", "PATIENT"), getPatient)
+//   .put(auditLog("UPDATE", "PATIENT"), updatePatient)
+//   .delete(auditLog("DELETE", "PATIENT"), deletePatient);
+export default router;

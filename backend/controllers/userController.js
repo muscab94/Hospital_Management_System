@@ -1,105 +1,155 @@
-import USER_MODEL from "../models/userModel.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import User from '../models/User.js';
+import asyncHandler from '../utils/asyncHandler.js';
 
-// REGISTER (Admin creates or self-register)
-export const registerUser = async (req, res) => {
-  try {
-    const { user_name, email, password, role } = req.body;
+// @desc    Get all staff members
+// @route   GET /api/staff
+// @access  Private (Admin only)
+export const getAllStaff = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const startIndex = (page - 1) * limit;
 
-    const existing = await USER_MODEL.findOne({ email });
-    if (existing) {
-      return res.status(400).json({ message: "Email already in use" });
-    }
+  let query = {};
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+  if (req.query.role) {
+    query.role = req.query.role;
+  }
 
-    const user = new USER_MODEL({
-      user_name,
-      email,
-      password: hashedPassword,
-      role
+  if (req.query.isActive !== undefined) {
+    query.isActive = req.query.isActive === 'true';
+  }
+
+  if (req.query.search) {
+    const searchRegex = new RegExp(req.query.search, 'i');
+    query.$or = [
+      { name: searchRegex },
+      { email: searchRegex },
+      { employeeId: searchRegex },
+      { phone: searchRegex },
+    ];
+  }
+
+  const staff = await User.find(query)
+    .select('-password')
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip(startIndex);
+
+  const total = await User.countDocuments(query);
+
+  res.status(200).json({
+    success: true,
+    count: staff.length,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    },
+    data: staff,
+  });
+});
+
+// @desc    Get single staff member
+// @route   GET /api/staff/:id
+// @access  Private (Admin only)
+export const getStaffMember = asyncHandler(async (req, res) => {
+  const staff = await User.findById(req.params.id).select('-password');
+
+  if (!staff) {
+    return res.status(404).json({
+      success: false,
+      message: 'Staff member not found',
     });
-
-    await user.save();
-    res.status(201).json({ message: "User registered successfully", user });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
   }
-};
 
-// LOGIN
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  res.status(200).json({
+    success: true,
+    data: staff,
+  });
+});
 
-    const user = await USER_MODEL.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+// @desc    Update staff member
+// @route   PUT /api/staff/:id
+// @access  Private (Admin only)
+export const updateStaffMember = asyncHandler(async (req, res) => {
+  const fieldsToUpdate = { ...req.body };
+  delete fieldsToUpdate.password; // Prevent password update here
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+  let staff = await User.findById(req.params.id);
 
-    // create JWT token
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      "my#secret",
-      { expiresIn: "1d" }
-    );
-
-    res.json({ message: "Login successful", token, user });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  if (!staff) {
+    return res.status(404).json({
+      success: false,
+      message: 'Staff member not found',
+    });
   }
-};
 
-// GET ALL USERS (Admin only)
-export const getAllUsers = async (req, res) => {
-  try {
-    const users = await USER_MODEL.find().select("-password");
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+  staff = await User.findByIdAndUpdate(req.params.id, fieldsToUpdate, {
+    new: true,
+    runValidators: true,
+  }).select('-password');
 
-// GET USER BY ID
-export const getUserById = async (req, res) => {
-  try {
-    const user = await USER_MODEL.findById(req.params.id).select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+  res.status(200).json({
+    success: true,
+    message: 'Staff member updated successfully',
+    data: staff,
+  });
+});
 
-// UPDATE USER
-export const updateUser = async (req, res) => {
-  try {
-    const updates = { ...req.body };
-    if (updates.password) {
-      updates.password = await bcrypt.hash(updates.password, 10);
-    }
-    const updated = await USER_MODEL.findByIdAndUpdate(
-      req.params.id, 
-      updates, 
-      { new: true, runValidators: true }
-    ).select("-password");
-    
-    if (!updated) return res.status(404).json({ message: "User not found" });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+// @desc    Deactivate staff member
+// @route   DELETE /api/staff/:id
+// @access  Private (Admin only)
+export const deactivateStaffMember = asyncHandler(async (req, res) => {
+  const staff = await User.findById(req.params.id);
 
-// DELETE USER
-export const deleteUser = async (req, res) => {
-  try {
-    const deleted = await USER_MODEL.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: "User not found" });
-    res.json({ message: "User deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  if (!staff) {
+    return res.status(404).json({
+      success: false,
+      message: 'Staff member not found',
+    });
   }
-};
+
+  await User.findByIdAndUpdate(req.params.id, { isActive: false });
+
+  res.status(200).json({
+    success: true,
+    message: 'Staff member deactivated successfully',
+  });
+});
+
+// @desc    Get all doctors
+// @route   GET /api/staff/doctors
+// @access  Private
+export const getDoctors = asyncHandler(async (req, res) => {
+  const doctors = await User.find({ role: 'doctor', isActive: true })
+    .select('name email specialty phone licenseNumber');
+
+  res.status(200).json({
+    success: true,
+    count: doctors.length,
+    data: doctors,
+  });
+});
+
+// @desc    Get staff statistics
+// @route   GET /api/staff/stats
+// @access  Private (Admin only)
+export const getStaffStats = asyncHandler(async (req, res) => {
+  const totalStaff = await User.countDocuments({ isActive: true });
+  const doctors = await User.countDocuments({ role: 'doctor', isActive: true });
+  const receptionists = await User.countDocuments({ role: 'receptionist', isActive: true });
+  const cashiers = await User.countDocuments({ role: 'cashier', isActive: true });
+  const pharmacists = await User.countDocuments({ role: 'pharmacist', isActive: true });
+
+  res.status(200).json({
+    success: true,
+    data: {
+      totalStaff,
+      doctors,
+      receptionists,
+      cashiers,
+      pharmacists,
+    },
+  });
+});

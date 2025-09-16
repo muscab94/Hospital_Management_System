@@ -1,29 +1,34 @@
-import express from "express"
+import express from 'express';
 import {
+  getAppointments,
+  getAppointment,
   createAppointment,
-  getAllAppointments,
-  getSingleAppointment,
   updateAppointment,
-  deleteAppointment,
-} from "../controllers/appointmentController.js"
+  cancelAppointment,
+  getDoctorAvailability,
+  getAppointmentStats
+} from '../controllers/appointmentController.js';
 
-import { authMiddleware, authorizeRoles } from "../middleware/authMiddleware.js"
+import { protect, authorize } from '../middleware/auth.js';
+import auditLog from '../middleware/auditLog.js';
 
-const router = express.Router()
+const router = express.Router();
 
-// CREATE appointment (Admin, Receptionist, Doctor can create)
-router.post("/", authMiddleware, authorizeRoles("admin", "receptionist", "doctor"), createAppointment)
+// All routes require authentication
+router.use(protect);
 
-// GET all appointments (Admin, Receptionist, Doctor can view)
-router.get("/", authMiddleware, authorizeRoles("admin", "receptionist", "doctor"), getAllAppointments)
+router
+  .route('/')
+  .get(authorize('admin', 'doctor', 'receptionist'), getAppointments)
+  .post(authorize('admin', 'receptionist'), auditLog('CREATE', 'APPOINTMENT'), createAppointment);
 
-// GET single appointment
-router.get("/:id", authMiddleware, authorizeRoles("admin", "receptionist", "doctor", "patient"), getSingleAppointment)
+router.get('/stats', authorize('admin', 'doctor', 'receptionist'), getAppointmentStats);
+router.get('/availability/:doctorId', authorize('admin', 'receptionist'), getDoctorAvailability);
 
-// UPDATE appointment (Admin, Doctor, Receptionist can update)
-router.put("/:id", authMiddleware, authorizeRoles("admin", "doctor", "receptionist"), updateAppointment)
+router
+  .route('/:id')
+  .get(authorize('admin', 'doctor', 'receptionist'), auditLog('VIEW', 'APPOINTMENT'), getAppointment)
+  .put(authorize('admin', 'doctor', 'receptionist'), auditLog('UPDATE', 'APPOINTMENT'), updateAppointment)
+  .delete(authorize('admin', 'doctor', 'receptionist'), auditLog('DELETE', 'APPOINTMENT'), cancelAppointment);
 
-// DELETE appointment (Admin only)
-router.delete("/:id", authMiddleware, authorizeRoles("admin"), deleteAppointment)
-
-export default router
+export default router;
