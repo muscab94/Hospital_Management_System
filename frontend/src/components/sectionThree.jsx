@@ -46,7 +46,7 @@ function SectionThree() {
 
   return (
     <div ref={sectionRef}>
-      <div className="w-full h-72 my-20 bg-blue-100 flex items-center justify-between px-20">
+      <div className="w-full h-72 my-20 bg-gray- flex items-center justify-between px-20">
         <div className="bg-white w-60 h-[140px] relative">
           <i className="fa-solid fa-user-doctor absolute left-24 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-4 pr-10 rounded-full"></i>
           <h1 className="text-center pt-8 font-bold text-[2em]">{doctors}</h1>

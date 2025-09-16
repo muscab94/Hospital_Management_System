@@ -60,7 +60,7 @@ const SectionDoctors = () => {
             <img
               src={doc.image}
               alt={doc.name}
-              className="w-24 h-24 object-cover rounded-full transition-transform duration-500 hover:scale-110"
+              className="w-24 h-24 object-cover rounded-full transition-transform duration-500 hover:scale-150"
             />
             <div>
               <h2 className="text-lg font-bold text-gray-800">{doc.name}</h2>

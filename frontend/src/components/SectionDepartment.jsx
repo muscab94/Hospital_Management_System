@@ -58,7 +58,7 @@ function SectionDepartment() {
   return (
     <div className="px-6 md:px-12 py-16 font-sans mb-20 mt-10">
       {/* Title */}
-      <h2 className="text-4xl md:text-5xl font-bold text-center text-blue-900 mb-4">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-blue-700 mb-4">
         Departments
       </h2>
       <p className="text-center text-gray-500 mb-12 max-w-2xl mx-auto">
@@ -87,7 +87,7 @@ function SectionDepartment() {
 
         {/* Details */}
         <div className="lg:w-2/4 space-y-4">
-          <h3 className="text-2xl md:text-3xl font-bold text-blue-900">{selected.title}</h3>
+          <h3 className="text-2xl md:text-3xl font-bold text-blue-700">{selected.title}</h3>
           <em className="text-gray-500">{selected.shortDesc}</em>
           <p className="text-gray-700">{selected.longDesc}</p>
         </div>

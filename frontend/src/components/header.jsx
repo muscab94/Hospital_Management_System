@@ -2,6 +2,7 @@
 import { FaEnvelope, FaPhoneAlt, FaUser, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,20 +34,20 @@ export default function Header() {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-7 text-[20px] ml-12 items-center  text-gray-700">
-          <li className="hover:text-blue-600 cursor-pointer">Home</li>
-          <li className="hover:text-blue-600 cursor-pointer">About</li>
-          <li className="hover:text-blue-600 cursor-pointer">Services</li>
-          <li className="hover:text-blue-600 cursor-pointer">Departments</li>
-          <li className="hover:text-blue-600 cursor-pointer">Doctors</li>
-          <li className="hover:text-blue-600 cursor-pointer">Contact</li>
+          <Link to= "/"><li className="hover:text-blue-600 cursor-pointer">Home</li></Link>
+          <Link to= "/About"><li className="hover:text-blue-600 cursor-pointer">About</li></Link>
+          <Link to= "/service" ><li className="hover:text-blue-600 cursor-pointer">Services</li></Link>
+          <Link to= "/Department"><li className="hover:text-blue-600 cursor-pointer">Departments</li></Link>
+          <Link to= "/doctor" ><li className="hover:text-blue-600 cursor-pointer">Doctors</li></Link>
+          <Link to= "/contact" ><li className="hover:text-blue-600 cursor-pointer">Contact</li></Link>
 
 
         </ul>
             
                   {/* Button */}
-            <button className="bg-blue-60 text-black -ml-3 bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-700">
+            <Link to= "/appointment" ><button className="bg-blue-60 text-black -ml-3 bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-700">
                Make an appointment
-            </button>
+            </button></Link>
           
 
         {/* Mobile Hamburger */}
