@@ -1,7 +1,10 @@
+import PatientTable from "../components/PatientTable"
 
 function Patients() {
   return (
-    <div>Patients</div>
+    <div>
+      <PatientTable />
+    </div>
   )
 }
 

@@ -16,6 +16,7 @@ const handleLogout = async (fn, path) => {
 
       // Clear token from localStorage
       localStorage.removeItem("token");
+      localStorage.removeItem("user")
 
       // Redirect to login page
       fn(path);

@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import assets from "../assets";
 import {
   LayoutDashboard,
@@ -11,12 +11,21 @@ import {
   LogOut,
 } from "lucide-react";
 import handleLogout from "../utils/logout";
-import { useNavigate } from "react-router-dom";
+
 function SideBar() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState({ name: "", role: "", position: "" });
+
+  // Get user info from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
-    <div className="h-screen w-64 flex flex-col bg-blue-600 text-white shadow-lg">
+    <div className="min-h-screen w-64 flex flex-col bg-blue-600 text-white shadow-lg">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-blue-400">
         <img
@@ -31,7 +40,7 @@ function SideBar() {
       </div>
 
       {/* Nav Links */}
-      <div className=" flex-1 bg-blue-700 py-10 px-3 space-y-3">
+      <div className="flex-1 bg-blue-700 py-10 px-3 space-y-3">
         <NavLink
           to="/Dashboard"
           className={({ isActive }) =>
@@ -120,14 +129,16 @@ function SideBar() {
       {/* Footer / User Info */}
       <div className="px-4 py-5 border-t border-blue-400">
         <div className="mb-3">
-          <h2 className="font-semibold text-white">User Name</h2>
-          <p className="text-sm text-blue-200">Role</p>
-          <p className="text-sm text-blue-200">Position</p>
+          <h2 className="font-semibold text-white">{user.name || "User Name"}</h2>
+          <p className="text-sm text-blue-200">{user.role || "Role"}</p>
+          <p className="text-sm text-blue-200">{user.position || "Position"}</p>
         </div>
-        <button className="flex items-center justify-center gap-2 w-full 
-        px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-600 transition 
-        text-sm font-medium"
-        onClick={()=> handleLogout(navigate, "/login")}>
+        <button
+          className="flex items-center justify-center gap-2 w-full 
+          px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-600 transition 
+          text-sm font-medium"
+          onClick={() => handleLogout(navigate, "/login")}
+        >
           <LogOut className="w-5 h-5" />
           Sign Out
         </button>
