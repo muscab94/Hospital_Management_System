@@ -45,7 +45,7 @@ function App() {
           <Route path="/service" element={<Service />} />
           <Route path="/Department" element={<Department />} />
           <Route path="/doctor" element={<DoctorPages />} />
-          <Route path="/contactList" element={<ContactList/>} />
+          
           
         </Route>
         <Route path="/Login" element={<AuthLayout />}>
@@ -66,6 +66,7 @@ function App() {
           <Route path="staffs/edit/:id" element={<StaffForm />} />
           <Route path="staffs/view/:id" element={<StaffView />} />
           <Route path="reports" element={<ReportPage />} />
+          <Route path="contactList" element={<ContactList/>} />
         </Route>
       </>
     )
