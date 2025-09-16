@@ -30,7 +30,7 @@ import Department from "./pages/Department";
 import DoctorPages from "./pages/DoctorPages";
 import StaffForm from "./components/StaffForm";
 
-// import StaffView from "./components/StafView";
+import StaffView from "./components/StafView";
 import ContactList from "./components/contactList";
 
 function App() {
