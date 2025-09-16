@@ -17,9 +17,7 @@ const About = () => {
           Providing compassionate healthcare services with state-of-the-art
           facilities and expert medical professionals.
         </p>
-        <Link to= "/Appointment"><button className="mt-6 px-8 py-3 bg-white text-blue-700 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
-          Book Appointment
-        </button></Link>
+       
       </section>
 
       {/* 2. About Us Section */}
@@ -142,9 +140,7 @@ const About = () => {
           Book an appointment with our specialists today and receive world-class
           healthcare services.
         </p>
-<button className="px-8 py-3 bg-white text-blue-700 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
-                <Link to ="/contact" >Contact Us  </Link>  
-        </button>
+
       </section>
     </div>
   );

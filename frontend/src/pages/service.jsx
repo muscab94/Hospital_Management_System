@@ -118,9 +118,7 @@ const Service = () => {
           Book your appointment today and receive world-class medical services
           from our expert team.
         </p>
-        <button className="px-8 py-3 bg-yellow-400 text-blue-900 font-semibold rounded-full shadow-lg hover:bg-yellow-300 transition transform hover:scale-105">
-          Book Appointment
-        </button>
+      
       </section>
     </div>
   );

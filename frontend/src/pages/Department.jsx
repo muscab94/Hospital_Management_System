@@ -120,9 +120,7 @@ const Department = () => {
           Choose from our departments and receive professional care from expert
           doctors and staff.
         </p>
-        <button className="px-8 py-3 bg-yellow-400 text-blue-900 font-semibold rounded-full shadow-lg hover:bg-yellow-300 transition transform hover:scale-105">
-          Book Appointment
-        </button>
+      
       </section>
     </div>
   );

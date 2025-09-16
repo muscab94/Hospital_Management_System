@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Appointment() {
   return (
     <div className="max-w-sm mx-auto mb-20 mt-8 bg-white rounded-xl shadow-md overflow-hidden">
@@ -43,9 +45,9 @@ function Appointment() {
         </div>
 
         {/* Button */}
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium transition">
+        <Link to="/contact"><button className="w-full bg-blue-600 hover:bg-blue-700 mt-4   text-white py-2 rounded-lg text-sm font-medium transition">
           Please Visit the Hospital
-        </button>
+        </button></Link>
       </div>
     </div>
   );

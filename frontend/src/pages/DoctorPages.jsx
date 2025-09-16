@@ -131,9 +131,7 @@ const DoctorPage = () => {
         <p className="max-w-xl mx-auto text-blue-100 mb-6">
           Get professional care from the best doctors. Our specialists are ready to help you.
         </p>
-        <Link to= "/Appointment" ><button className="px-8 py-3 bg-yellow-400 text-blue-900 font-semibold rounded-full shadow-lg hover:bg-yellow-300 transition transform hover:scale-105">
-          Make Appointment
-        </button></Link>
+     
       </section>
     </div>
   );
