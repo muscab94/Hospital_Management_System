@@ -29,11 +29,9 @@ import Service from "./pages/service";
 import Department from "./pages/Department";
 import DoctorPages from "./pages/DoctorPages";
 import StaffForm from "./components/StaffForm";
-<<<<<<< HEAD
-import StaffView from "./components/StafView";
-=======
+
+// import StaffView from "./components/StafView";
 import ContactList from "./components/contactList";
->>>>>>> c0cb14d243b51d81e66e572799f4a4b1ebb05a1a
 
 function App() {
   const router = createBrowserRouter(

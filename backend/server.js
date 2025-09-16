@@ -13,7 +13,7 @@ import appointmentRoutes from './routes/appointmentRouter.js';
 import medicalRecordRoutes from './routes/medicalRecordRouter.js';
 import staffRoutes from './routes/userRouter.js';
 import reportRoutes from './routes/reportRouter.js'
-
+import departmentRoutes from './routes/departmentRouter.js'
 import contactRouter from "./routes/contactRouter.js"
 
 dotenv.config()
