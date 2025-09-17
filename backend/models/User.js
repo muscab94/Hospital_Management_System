@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema({
    specialty: {
     type: String,
     enum: [
+      'none',
       'Cardiology',
       'Dermatology',
       'Endocrinology',

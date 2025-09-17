@@ -19,8 +19,8 @@ export default function StaffForm() {
     role: "",
     phone: "",
     address: "",
-    specialty: "",
-    licenseNumber: "",
+    specialty: "none",
+    licenseNumber: 0,
     isActive: true,
   });
 
