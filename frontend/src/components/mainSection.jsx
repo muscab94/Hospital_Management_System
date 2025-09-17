@@ -63,7 +63,7 @@ function MainSection() {
        <SectionDepartment/>
        <SectionDoctors/>
        <Testimonials/>
-       <Team/>
+       {/* <Team/> */}
        {/* <ContactForm/> */}
        {/* <Footer/> */}
     </div>
