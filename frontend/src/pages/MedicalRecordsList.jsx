@@ -1,7 +1,7 @@
 // src/pages/MedicalRecordsList.jsx
 import { useState, useEffect } from "react";
 import { getMedicalRecords, createMedicalRecord } from "../services/medicalRecord";
-import { fetchPatients } from "../services/patientService"; // use service
+import { fetchPatients } from "../services/patientService";
 import { fetchDoctors } from "../services/staffService";
 import toast from "react-hot-toast";
 
@@ -36,25 +36,25 @@ export default function MedicalRecordsList() {
     fetchRecordsData();
   }, [page]);
 
-  // Fetch patients and doctors when form opens
-  const handleAddNewClick = async () => {
-    setShowForm(!showForm);
+const handleAddNewClick = async () => {
+  if (!showForm) { // only fetch when opening
+    try {
+      const patientsRes = await fetchPatients();
+      setPatients(patientsRes.data.data);
 
-    if (!showForm) { // only fetch when opening
-      try {
-        // ✅ Fetch patients using patientService
-        const patientsRes = await fetchPatients();
-        setPatients(patientsRes.data.data);
+      const doctorsRes = await fetchDoctors();
+      setDoctors(doctorsRes.data.data);
 
-        // Fetch doctors
-        const doctorsRes = await fetchDoctors();
-        setDoctors(doctorsRes.data.data);
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to load patients or doctors");
-      }
+      setShowForm(true); // show form after fetching
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load patients or doctors");
     }
-  };
+  } else {
+    setShowForm(false); // just close the form
+  }
+};
+
 
   // Handle form submit
   const handleSubmit = async (e) => {

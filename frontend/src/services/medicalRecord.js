@@ -1,40 +1,48 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:5000/api/medical-records';
-const token = localStorage.getItem("token");
+const API_URL = "http://localhost:5000/api/medical-records";
 
+const getTokenHeaders = () => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
+// Get records with optional patient filter
 export const getMedicalRecords = (page = 1, limit = 10, patientId = "") => {
-  if (!token) {
-    navigate("/login"); // redirect if no token
-    return;
-  }
-  const query = `?page=${page}&limit=${limit}${
-    patientId ? `&patient=${patientId}` : ""
-  }`;
-  return axios.get(API_URL + query, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const query = `?page=${page}&limit=${limit}${patientId ? `&patient=${patientId}` : ""}`;
+  return axios.get(API_URL + query, getTokenHeaders());
 };
 
+// Get single record
 export const getMedicalRecord = (id) => {
-  return axios.get(`${API_URL}/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  return axios.get(`${API_URL}/${id}`, getTokenHeaders());
 };
 
-export const createMedicalRecord = (data) => axios.post(API_URL, data);
+// Create new medical record
+export const createMedicalRecord = (data) => {
+  return axios.post(API_URL, data, getTokenHeaders());
+};
 
-export const updateMedicalRecord = (id, data) =>
-  axios.put(`${API_URL}/${id}`, data);
+// Update medical record
+export const updateMedicalRecord = (id, data) => {
+  return axios.put(`${API_URL}/${id}`, data, getTokenHeaders());
+};
 
-export const addLabTest = (id, data) =>
-  axios.post(`${API_URL}/${id}/lab-tests`, data);
+// Add lab test to a record
+export const addLabTest = (id, data) => {
+  return axios.post(`${API_URL}/${id}/lab-tests`, data, getTokenHeaders());
+};
 
-export const getPatientMedicalHistory = (patientId, page = 1, limit = 10) =>
-  axios.get(`${API_URL}/patient/${patientId}?page=${page}&limit=${limit}`);
+// Get patient medical history
+export const getPatientMedicalHistory = (patientId, page = 1, limit = 10) => {
+  return axios.get(`${API_URL}/patient/${patientId}?page=${page}&limit=${limit}`, getTokenHeaders());
+};
 
-export const getMedicalRecordStats = () => axios.get(`${API_URL}/stats`);
+// Get medical record statistics
+export const getMedicalRecordStats = () => {
+  return axios.get(`${API_URL}/stats`, getTokenHeaders());
+};

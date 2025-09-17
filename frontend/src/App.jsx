@@ -32,6 +32,7 @@ import StaffForm from "./components/StaffForm";
 
 import StaffView from "./components/StafView";
 import ContactList from "./components/contactList";
+import MedicalRecordsList from "./pages/MedicalRecords";
 
 function App() {
   const router = createBrowserRouter(
@@ -60,6 +61,8 @@ function App() {
           <Route path="appointments" element={<Appointments />} />
           <Route path="appointments/view/:id" element={<ViewAppointment />} />
           <Route path="medical-records" element={<MedicalRecords />} />
+          
+          <Route path="medical-records" element={<MedicalRecordsList />} />
           <Route path="medical-records/:id" element={<MedicalRecordDetails />} />
           <Route path="staffs" element={<Staffs />} />
           <Route path="staffs/add" element={<StaffForm />} />
