@@ -275,3 +275,59 @@ export const getAppointmentStats = asyncHandler(async (req, res) => {
     },
   });
 });
+// @desc    Get appointments for a specific doctor
+// @route   GET /api/appointments/doctor/:doctorId
+// @access  Private (Admin, Receptionist, Doctor themselves)
+export const getAppointmentsByDoctor = asyncHandler(async (req, res) => {
+  const { doctorId } = req.params;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const startIndex = (page - 1) * limit;
+
+  // If doctor is logged in, ensure they can only see their own appointments
+  if (req.user.role === 'doctor' && req.user.id !== doctorId) {
+    return res.status(403).json({
+      success: false,
+      message: 'Not authorized to view this doctor’s appointments',
+    });
+  }
+
+  const query = { doctor: doctorId };
+
+  if (req.query.date) {
+    const startDate = new Date(req.query.date);
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 1);
+
+    query.appointmentDate = {
+      $gte: startDate,
+      $lt: endDate,
+    };
+  }
+
+  if (req.query.status) {
+    query.status = req.query.status;
+  }
+
+  const appointments = await Appointment.find(query)
+    .populate('patient', 'fullName phone patientId')
+    .populate('doctor', 'name specialty')
+    .populate('scheduledBy', 'name')
+    .sort({ appointmentDate: 1, appointmentTime: 1 })
+    .limit(limit)
+    .skip(startIndex);
+
+  const total = await Appointment.countDocuments(query);
+
+  res.status(200).json({
+    success: true,
+    count: appointments.length,
+    pagination: {
+      page,
+      limit,
+      total,
+      pages: Math.ceil(total / limit),
+    },
+    data: appointments,
+  });
+});

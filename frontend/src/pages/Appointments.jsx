@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import { Eye, Pencil, Trash2, Plus, X, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function Appointments() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [patients, setPatients] = useState([]);
   const [doctors, setDoctors] = useState([]);
@@ -26,109 +28,113 @@ function Appointments() {
   });
 
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user")) || { role: "guest" };
 
-  // Fetch patients, doctors, appointments, stats
-  const fetchData = async () => {
+  const canAdd = ["admin", "receptionist"].includes(user.role);
+  const canEdit = ["admin", "receptionist"].includes(user.role);
+  const canDelete = user.role === "admin";
+
+  // Fetch doctors
+  const fetchDoctors = async () => {
+    if (user.role === "doctor") return;
+    try {
+      const res = await axios.get("http://localhost:5000/api/staff/doctors", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setDoctors(res.data.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to fetch doctors");
+    }
+  };
+
+  // Fetch patients
+  const fetchPatients = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/patients", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPatients(res.data.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to fetch patients");
+    }
+  };
+
+  // Fetch appointments
+  const fetchAppointments = async () => {
     setLoading(true);
     try {
-      const [patientsRes, doctorsRes, appointmentsRes, statsRes] =
-        await Promise.all([
-          fetch("http://localhost:5000/api/patients", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch("http://localhost:5000/api/staff", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch("http://localhost:5000/api/appointments", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          fetch("http://localhost:5000/api/appointments/stats", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-      const patientsData = await patientsRes.json();
-      const doctorsData = await doctorsRes.json();
-      const appointmentsData = await appointmentsRes.json();
-      const statsData = await statsRes.json();
-      setPatients(patientsData.data || []);
-      setDoctors(
-        doctorsData.data.filter((data) => data.role === "doctor") || []
-      );
-      console.log(appointmentsData.data);
-      setAppointments(appointmentsData.data || []);
-      setStats(statsData.data || null);
+      let url = "http://localhost:5000/api/appointments";
+      if (user.role === "doctor") url = `http://localhost:5000/api/appointments/doctor/${user.id}`;
+      if (searchTerm.trim()) url += `?search=${searchTerm}`;
+      const res = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
+      setAppointments(res.data.data || []);
     } catch (err) {
-      console.error("Error fetching data:", err);
+      console.error(err);
+      toast.error("Failed to fetch appointments");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  // Handle search (server-side)
-  useEffect(() => {
-    const fetchSearch = async () => {
-      if (!searchTerm.trim()) {
-        fetchData();
-        return;
-      }
-      try {
-        const res = await fetch(
-          `http://localhost:5000/api/appointments?search=${searchTerm}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        const data = await res.json();
-        setAppointments(data.data || []);
-      } catch (err) {
-        console.error("Search failed:", err);
-      }
-    };
-    fetchSearch();
-  }, [searchTerm]);
-
-  // Handle form change
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  // Handle availability check
-  const checkAvailability = async () => {
-    if (!formData.doctorId || !formData.appointmentDate) return;
+  // Fetch stats
+  const fetchStats = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/appointments/availability/${formData.doctorId}?date=${formData.appointmentDate}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const data = await res.json();
-      setAvailableSlots(data.data.availableSlots || []);
+      const res = await axios.get("http://localhost:5000/api/appointments/stats", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setStats(res.data.data || null);
     } catch (err) {
-      console.error("Error fetching availability:", err);
+      console.error(err);
+      toast.error("Failed to fetch stats");
     }
   };
 
-  // Handle submit (create/update)
+  useEffect(() => {
+    if (user.role !== "doctor") fetchDoctors();
+  }, [user.role]);
+
+  useEffect(() => {
+    fetchPatients();
+    fetchAppointments();
+    fetchStats();
+  }, [user.role, searchTerm]);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const checkAvailability = async () => {
+    if (!formData.doctorId || !formData.appointmentDate) return;
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/appointments/availability/${formData.doctorId}?date=${formData.appointmentDate}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const slots = res.data.data.availableSlots || [];
+      setAvailableSlots(slots);
+      if (slots.length === 0) toast("No available slots for this date", { icon: "⚠️" });
+      else toast.success(`Available slots: ${slots.join(", ")}`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to check availability");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const method = editingAppointment ? "PUT" : "POST";
+      const method = editingAppointment ? "put" : "post";
       const url = editingAppointment
         ? `http://localhost:5000/api/appointments/${editingAppointment._id}`
         : "http://localhost:5000/api/appointments";
 
-      const res = await fetch(url, {
+      const res = await axios({
         method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+        url,
+        headers: { Authorization: `Bearer ${token}` },
+        data: {
           patient: formData.patientId,
           doctor: formData.doctorId,
           appointmentDate: formData.appointmentDate,
@@ -136,12 +142,12 @@ function Appointments() {
           type: formData.type,
           status: formData.status,
           reason: formData.notes,
-        }),
+        },
       });
-      const data = await res.json();
-      console.log(data); // <-- debug backend response
-      if (res.ok) {
-        fetchData();
+
+      if (res.data.success) {
+        toast.success(`Appointment ${editingAppointment ? "updated" : "created"} successfully`);
+        fetchAppointments();
         setIsModalOpen(false);
         setEditingAppointment(null);
         setFormData({
@@ -153,34 +159,55 @@ function Appointments() {
           status: "scheduled",
           notes: "",
         });
-      } else {
-        const error = await res.json();
-        alert(error.message || "Error saving appointment");
       }
     } catch (err) {
-      console.error("Error saving appointment:", err);
+      console.error(err);
+      toast.error(err.response?.data?.message || "Failed to save appointment");
     }
   };
 
-  // Handle delete
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to cancel this appointment?"))
-      return;
-    try {
-      const res = await fetch(`http://localhost:5000/api/appointments/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) fetchData();
-    } catch (err) {
-      console.error("Error deleting appointment:", err);
-    }
+  const handleDelete = (id) => {
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-2">
+          <span>Are you sure you want to cancel this appointment?</span>
+          <div className="flex gap-2 justify-end mt-1">
+            <button
+              className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+              onClick={async () => {
+                toast.dismiss(t.id);
+                try {
+                  await axios.delete(`http://localhost:5000/api/appointments/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                  });
+                  toast.success("Appointment cancelled successfully");
+                  fetchAppointments();
+                } catch (err) {
+                  console.error(err);
+                  toast.error(err.response?.data?.message || "Failed to delete appointment");
+                }
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
   };
 
   if (loading) return <p className="p-6">Loading appointments...</p>;
 
   return (
     <div className="p-6">
+      <Toaster position="top-right" reverseOrder={false} />
       {/* Stats */}
       {stats && (
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -202,12 +229,14 @@ function Appointments() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
-        <button
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg shadow hover:bg-gray-800"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <Plus size={18} /> Add Appointment
-        </button>
+        {canAdd && (
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg shadow hover:bg-gray-800"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Plus size={18} /> Add Appointment
+          </button>
+        )}
       </div>
 
       {/* Search */}
@@ -239,11 +268,9 @@ function Appointments() {
           <tbody>
             {appointments.map((apt) => (
               <tr key={apt._id} className="border-t hover:bg-gray-50 text-sm">
-                <td className="p-4">{apt.patient.patientId}</td>
+                <td className="p-4">{apt.patient?.fullName}</td>
                 <td className="p-4">{apt.doctor?.name}</td>
-                <td className="p-4">
-                  {new Date(apt.appointmentDate).toLocaleDateString()}
-                </td>
+                <td className="p-4">{new Date(apt.appointmentDate).toLocaleDateString()}</td>
                 <td className="p-4">{apt.appointmentTime}</td>
                 <td className="p-4 capitalize">{apt.type}</td>
                 <td className="p-4">
@@ -266,30 +293,34 @@ function Appointments() {
                   >
                     <Eye size={16} />
                   </button>
-                  <button
-                    className="p-2 border rounded hover:bg-gray-100"
-                    onClick={() => {
-                      setEditingAppointment(apt);
-                      setFormData({
-                        patientId: apt.patient?._id || "",
-                        doctorId: apt.doctor?._id || "",
-                        appointmentDate: apt.appointmentDate.split("T")[0],
-                        appointmentTime: apt.appointmentTime,
-                        type: apt.type,
-                        status: apt.status,
-                        notes: apt.notes,
-                      });
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    className="p-2 border rounded hover:bg-gray-100"
-                    onClick={() => handleDelete(apt._id)}
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  {canEdit && (
+                    <button
+                      className="p-2 border rounded hover:bg-gray-100"
+                      onClick={() => {
+                        setEditingAppointment(apt);
+                        setFormData({
+                          patientId: apt.patient?._id || "",
+                          doctorId: apt.doctor?._id || "",
+                          appointmentDate: apt.appointmentDate.split("T")[0],
+                          appointmentTime: apt.appointmentTime,
+                          type: apt.type,
+                          status: apt.status,
+                          notes: apt.reason || "",
+                        });
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <Pencil size={16} />
+                    </button>
+                  )}
+                  {canDelete && (
+                    <button
+                      className="p-2 border rounded hover:bg-gray-100"
+                      onClick={() => handleDelete(apt._id)}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -336,30 +367,30 @@ function Appointments() {
               </div>
 
               {/* Doctor */}
-              <div>
-                <label className="block text-sm font-medium">Doctor</label>
-                <select
-                  name="doctorId"
-                  value={formData.doctorId}
-                  onChange={handleChange}
-                  className="mt-1 w-full border p-2 rounded"
-                  required
-                >
-                  <option value="">Select Doctor</option>
-                  {doctors.map((d) => (
-                    <option key={d._id} value={d._id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {user.role !== "doctor" && (
+                <div>
+                  <label className="block text-sm font-medium">Doctor</label>
+                  <select
+                    name="doctorId"
+                    value={formData.doctorId}
+                    onChange={handleChange}
+                    className="mt-1 w-full border p-2 rounded"
+                    required
+                  >
+                    <option value="">Select Doctor</option>
+                    {doctors.map((d) => (
+                      <option key={d._id} value={d._id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Date + Time */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium">
-                    Appointment Date
-                  </label>
+                  <label className="block text-sm font-medium">Appointment Date</label>
                   <input
                     type="date"
                     name="appointmentDate"
@@ -370,9 +401,7 @@ function Appointments() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">
-                    Appointment Time
-                  </label>
+                  <label className="block text-sm font-medium">Appointment Time</label>
                   <input
                     type="time"
                     name="appointmentTime"
@@ -381,18 +410,14 @@ function Appointments() {
                     className="mt-1 w-full border p-2 rounded"
                     required
                   />
-                  {/* Show available slots */}
-                  <button
-                    type="button"
-                    onClick={checkAvailability}
-                    className="mt-2 text-xs px-2 py-1 border rounded hover:bg-gray-100"
-                  >
-                    Check Availability
-                  </button>
-                  {availableSlots.length > 0 && (
-                    <p className="text-xs text-gray-600 mt-1">
-                      Available: {availableSlots.join(", ")}
-                    </p>
+                  {user.role !== "doctor" && (
+                    <button
+                      type="button"
+                      onClick={checkAvailability}
+                      className="mt-2 text-xs px-2 py-1 border rounded hover:bg-gray-100"
+                    >
+                      Check Availability
+                    </button>
                   )}
                 </div>
               </div>
@@ -422,6 +447,7 @@ function Appointments() {
                   className="mt-1 w-full border p-2 rounded"
                 >
                   <option value="scheduled">Scheduled</option>
+                  <option value="in-progress">In Progress</option>
                   <option value="completed">Completed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
@@ -435,24 +461,16 @@ function Appointments() {
                   value={formData.notes}
                   onChange={handleChange}
                   className="mt-1 w-full border p-2 rounded"
+                  rows={3}
                 />
               </div>
 
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-gray-900 text-white rounded"
-                >
-                  {editingAppointment ? "Update" : "Save"}
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800"
+              >
+                {editingAppointment ? "Update" : "Create"}
+              </button>
             </form>
           </div>
         </div>

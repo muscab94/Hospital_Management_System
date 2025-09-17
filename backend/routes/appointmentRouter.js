@@ -6,7 +6,8 @@ import {
   updateAppointment,
   cancelAppointment,
   getDoctorAvailability,
-  getAppointmentStats
+  getAppointmentStats,
+  getAppointmentsByDoctor
 } from '../controllers/appointmentController.js';
 
 import { protect, authorize } from '../middleware/auth.js';
@@ -30,5 +31,13 @@ router
   .get(authorize('admin', 'doctor', 'receptionist'), auditLog('VIEW', 'APPOINTMENT'), getAppointment)
   .put(authorize('admin', 'doctor', 'receptionist'), auditLog('UPDATE', 'APPOINTMENT'), updateAppointment)
   .delete(authorize('admin', 'doctor', 'receptionist'), auditLog('DELETE', 'APPOINTMENT'), cancelAppointment);
+
+// Get appointments for specific doctor
+router.get(
+  '/doctor/:doctorId',
+  authorize('admin', 'receptionist', 'doctor'),
+  getAppointmentsByDoctor
+);
+
 
 export default router;

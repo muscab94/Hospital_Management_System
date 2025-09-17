@@ -4,6 +4,8 @@ import { createStaff, updateStaff } from "../services/staffService";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { getHeaders } from "../services/staffService";
+import toast, { Toaster } from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export default function StaffForm() {
   const { id } = useParams(); // if present → edit mode
@@ -39,6 +41,11 @@ export default function StaffForm() {
         });
       } catch (err) {
         console.error("Failed to load staff:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to load staff member",
+        });
       }
     };
 
@@ -58,26 +65,35 @@ export default function StaffForm() {
     setLoading(true);
 
     try {
+      // Doctor validation
       if (
         formData.role === "doctor" &&
         (!formData.specialty || !formData.licenseNumber)
       ) {
-        alert("❌ Doctors must have Specialty and License Number!");
+        Swal.fire({
+          icon: "error",
+          title: "Validation Error",
+          text: "Doctors must have Specialty and License Number!",
+        });
         setLoading(false);
         return;
       }
 
       if (id) {
         await updateStaff(id, formData);
-        alert("✅ Staff updated successfully!");
+        toast.success("Staff updated successfully!");
       } else {
         await createStaff(formData);
-        alert("✅ Staff created successfully!");
+        toast.success("Staff created successfully!");
       }
       navigate("/dashboard/staffs");
     } catch (err) {
       console.error(err);
-      alert("❌ Something went wrong. Check console for details.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message || "Something went wrong. Check console.",
+      });
     } finally {
       setLoading(false);
     }
@@ -85,12 +101,11 @@ export default function StaffForm() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="w-full max-w-3xl p-6 bg-white rounded shadow">
         {/* Top bar with Heading on left, Back button on right */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
-            {id ? "Edit Staff" : "Add Staff"}
-          </h2>
+          <h2 className="text-xl font-bold">{id ? "Edit Staff" : "Add Staff"}</h2>
           <button
             type="button"
             onClick={() => navigate("/dashboard/staffs")}
