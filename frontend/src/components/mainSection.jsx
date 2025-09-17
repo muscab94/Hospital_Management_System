@@ -10,6 +10,7 @@ import SectionDoctors from "./SectionDoctors";
 import Testimonials from "./Testinomial";
 import ContactForm from "./ContactForm";
 import Footer from "./Footer";
+import Team from "./team";
 
 function MainSection() {
   const title = "Your Health Benefits";
@@ -62,6 +63,7 @@ function MainSection() {
        <SectionDepartment/>
        <SectionDoctors/>
        <Testimonials/>
+       <Team/>
        {/* <ContactForm/> */}
        {/* <Footer/> */}
     </div>
