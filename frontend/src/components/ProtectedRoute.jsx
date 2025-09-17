@@ -1,15 +1,32 @@
 // ProtectedRoute.jsx
-import React from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { checkServer } from "../utils/checker";
 
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token"); // check if user has JWT token
+export default function ProtectedRoute({ children }) {
+  const [loading, setLoading] = useState(true);
+  const [isServerUp, setIsServerUp] = useState(true);
 
-  if (!token) {
-    return <Navigate to="/login" replace />; // redirect to login if not authenticated
-  }
+  useEffect(() => {
+    const verify = async () => {
+      const serverUp = await checkServer();
+      if (!serverUp) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+      setIsServerUp(serverUp);
+      setLoading(false);
+    };
+    verify();
+  }, []);
 
-  return children; // allow access if authenticated
+  if (loading) return <p>Checking server...</p>;
+
+  if (!isServerUp) return <Navigate to="/login" replace />;
+
+  const token = localStorage.getItem("token");
+  if (!token) return <Navigate to="/login" replace />;
+
+  return children;
 }
 
-export default ProtectedRoute;
