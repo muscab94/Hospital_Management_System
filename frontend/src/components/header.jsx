@@ -45,8 +45,8 @@ export default function Header() {
         </ul>
             
                   {/* Button */}
-            <Link to= "/appointment" ><button className="bg-blue-60 text-black -ml-3 bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-700">
-               Make an appointment
+            <Link to= "/appointment" ><button className="bg-blue-60 text-white text-[0.9em] -ml-3 bg-blue-500 px-3 py-2 rounded-full hover:bg-blue-700">
+               make an appointment
             </button></Link>
           
 

@@ -1,29 +1,40 @@
-import express from "express"
+import express from 'express';
 import {
+  getMedicalRecords,
+  getMedicalRecord,
   createMedicalRecord,
-  getAllMedicalRecords,
-  getMedicalRecordById,
   updateMedicalRecord,
-  deleteMedicalRecord,
-} from "../controllers/medicalRecordController.js"
+  getPatientMedicalHistory,
+  addLabTest,
+  getMedicalRecordStats
+} from '../controllers/medicalRecordController.js';
 
-import { authMiddleware, authorizeRoles } from "../middleware/authMiddleware.js"
+import { protect, authorize } from '../middleware/auth.js';
+import auditLog from '../middleware/auditLog.js';
 
-const router = express.Router()
+const router = express.Router();
 
-// CREATE record (doctor or nurse only)
-router.post("/", authMiddleware, authorizeRoles("doctor", "nurse"), createMedicalRecord)
+// All routes require authentication
+router.use(protect);
 
-// GET all records (admin, doctor, nurse)
-router.get("/", authMiddleware, authorizeRoles("admin", "doctor", "nurse"), getAllMedicalRecords)
+router
+  .route('/')
+  .get(authorize('admin', 'doctor'), getMedicalRecords)
+  .post(authorize('doctor'), auditLog('CREATE', 'MEDICAL_RECORD'), createMedicalRecord);
 
-// GET single record
-router.get("/:id", authMiddleware, authorizeRoles("admin", "doctor", "nurse"), getMedicalRecordById)
+router.get('/stats', authorize('admin', 'doctor'), getMedicalRecordStats);
+router.get(
+  '/patient/:patientId',
+  authorize('admin', 'doctor'),
+  auditLog('VIEW', 'MEDICAL_RECORD'),
+  getPatientMedicalHistory
+);
 
-// UPDATE record (doctor or nurse)
-router.put("/:id", authMiddleware, authorizeRoles("doctor", "nurse"), updateMedicalRecord)
+router
+  .route('/:id')
+  .get(authorize('admin', 'doctor'), auditLog('VIEW', 'MEDICAL_RECORD'), getMedicalRecord)
+  .put(authorize('doctor'), auditLog('UPDATE', 'MEDICAL_RECORD'), updateMedicalRecord);
 
-// DELETE record (admin only)
-router.delete("/:id", authMiddleware, authorizeRoles("admin"), deleteMedicalRecord)
+router.post('/:id/lab-tests', authorize('doctor'), auditLog('UPDATE', 'MEDICAL_RECORD'), addLabTest);
 
-export default router
+export default router;

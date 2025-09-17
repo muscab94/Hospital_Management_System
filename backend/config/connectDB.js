@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
-import dotenv from 'dotenv';
-
-dotenv.config()
+import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_ATLAS_URI);
-    console.log("Connected successfully");
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://ommziid5:asmac7887@cluster0.ezddw9u.mongodb.net/cuman_hospital?retryWrites=true&w=majority&appName=Cluster0', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error("connection failed:", error.message);
+    console.error('Database connection error:', error.message);
     process.exit(1);
   }
 };

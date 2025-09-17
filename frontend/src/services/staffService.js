@@ -19,3 +19,11 @@ export const deactivateStaffMember = (id) => axios.delete(`${API_URL}/${id}`, ge
 export const fetchDoctors = () => axios.get(`${API_URL}/doctors`, getHeaders());
 export const fetchStaffStats = () => axios.get(`${API_URL}/stats`, getHeaders());
 
+
+// Create staff (register)
+export const createStaff = (data) =>
+  axios.post("http://localhost:5000/api/auth/register", data, getHeaders());
+
+// Update staff (admin updating staff by ID)
+export const updateStaff = (id, data) =>
+  axios.put(`http://localhost:5000/api/users/${id}`, data, getHeaders());

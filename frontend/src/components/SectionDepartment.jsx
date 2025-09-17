@@ -1,8 +1,6 @@
-
-
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Import images from assets
 import cardiologyImg from "../assets/images/image.png";
 import neurologyImg from "../assets/image2.png";
 import hepatologyImg from "../assets/image3.png";
@@ -42,12 +40,12 @@ const departments = [
       "The Pediatrics department offers a full range of medical services for newborns, infants, children, and teenagers. We provide preventive care, vaccinations, routine check-ups, and management of acute and chronic illnesses. Our child-friendly environment ensures comfort and safety, while our pediatricians collaborate with parents to support healthy growth and development.",
     image: pediatricsImg,
   },
-   {
+  {
     name: "Eye care",
-    title: "Pediatrics",
-    shortDesc: "Comprehensive healthcare for children and adolescents.",
+    title: "Eye care",
+    shortDesc: "Complete eye and vision care services.",
     longDesc:
-      "The Pediatrics department offers a full range of medical services for newborns, infants, children, and teenagers. We provide preventive care, vaccinations, routine check-ups, and management of acute and chronic illnesses. Our child-friendly environment ensures comfort and safety, while our pediatricians collaborate with parents to support healthy growth and development.",
+      "Our Eye Care department provides advanced diagnostics and treatments for vision problems, cataracts, glaucoma, and other eye conditions. With modern laser technology and expert ophthalmologists, we ensure your eyes stay healthy and your vision remains clear.",
     image: Eyecare,
   },
 ];
@@ -85,21 +83,65 @@ function SectionDepartment() {
           ))}
         </div>
 
-        {/* Details */}
-        <div className="lg:w-2/4 space-y-4">
-          <h3 className="text-2xl md:text-3xl font-bold text-blue-700">{selected.title}</h3>
-          <em className="text-gray-500">{selected.shortDesc}</em>
-          <p className="text-gray-700">{selected.longDesc}</p>
-        </div>
-
-        {/* Image */}
-        <div className="lg:w-1/4">
-          <img
-            src={selected.image}
-            alt={selected.title}
-            className="w-full h-auto rounded-lg shadow-lg object-cover transition-transform duration-300 hover:scale-105"
-          />
-        </div>
+        {/* Details + Image */}
+        <AnimatePresence mode="wait">
+          {selected.name === "Cardiology" ? (
+            // Cardiology: animate on scroll
+            <motion.div
+              key={selected.name}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex flex-col lg:flex-row gap-10 lg:w-3/4"
+            >
+              <div className="lg:w-2/3 space-y-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-blue-700">
+                  {selected.title}
+                </h3>
+                <em className="text-gray-500">{selected.shortDesc}</em>
+                <p className="text-gray-700">{selected.longDesc}</p>
+              </div>
+              <motion.img
+                src={selected.image}
+                alt={selected.title}
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8 }}
+                className="lg:w-1/3 rounded-lg shadow-lg object-cover"
+              />
+            </motion.div>
+          ) : (
+            // Other departments: animate on click
+            <motion.div
+              key={selected.name}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col lg:flex-row gap-10 lg:w-3/4"
+            >
+              <div className="lg:w-2/3 space-y-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-blue-700">
+                  {selected.title}
+                </h3>
+                <em className="text-gray-500">{selected.shortDesc}</em>
+                <p className="text-gray-700">{selected.longDesc}</p>
+              </div>
+              <motion.img
+                key={selected.image}
+                src={selected.image}
+                alt={selected.title}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="lg:w-1/3 rounded-lg shadow-lg object-cover"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

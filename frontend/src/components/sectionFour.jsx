@@ -39,9 +39,13 @@ function SectionFour() {
 
       <div className="grid md:grid-cols-3 gap-8">
         {newsData.map((item, index) => (
-          <div
+          <motion.div
             key={index}
             className="bg-white rounded-2xl shadow-md w-72 overflow-hidden flex flex-col"
+            initial={{ opacity: 0, y: 100 }}         // Start hidden, below
+            whileInView={{ opacity: 1, y: 0 }}       // Animate to visible
+            transition={{ duration: 0.8, delay: index * 0.2 }} // Staggered
+            viewport={{ once: true }}                // Run only once
           >
             {/* Image */}
             <img src={item.img} alt={item.title} className="w-full h-56 object-cover" />
@@ -56,20 +60,20 @@ function SectionFour() {
 
               {/* Author */}
               <div className="flex items-center gap-3 mt-6 pt-4 border-t">
-             <motion.img
-                src={item.img}
-                alt={item.author}
-                className="w-10 h-10 rounded-full object-cover"
-                whileHover={{ scale: 2 }} 
-                transition={{ type: "spring", stiffness: 300 }}
-              />
+                <motion.img
+                  src={item.img}
+                  alt={item.author}
+                  className="w-10 h-10 rounded-full object-cover"
+                  whileHover={{ scale: 1.5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                />
                 <div>
                   <p className="text-sm text-blue-700 font-medium">{item.author}</p>
                   <p className="text-xs text-gray-500">{item.role}</p>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

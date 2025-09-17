@@ -28,6 +28,7 @@ import About from "./pages/About";
 import Service from "./pages/service";
 import Department from "./pages/Department";
 import DoctorPages from "./pages/DoctorPages";
+import StaffForm from "./components/StaffForm";
 
 function App() {
   const router = createBrowserRouter(
@@ -56,6 +57,8 @@ function App() {
           <Route path="medical-records" element={<MedicalRecords />} />
           <Route path="medical-records/:id" element={<MedicalRecordDetails />} />
           <Route path="staffs" element={<Staffs />} />
+          <Route path="staffs/add" element={<StaffForm />} />
+          <Route path="staffs/edit/:id" element={<StaffForm />} />
           <Route path="reports" element={<ReportPage />} />
         </Route>
       </>
