@@ -18,7 +18,7 @@ export default function Footer() {
         </div>
 
         {/* Column 2: Navigation */}
-        <div className="ml-20">
+        <div className=" sm:ml-20">
           <h2 className="text-xl font-semibold mb-4">Quick Links</h2>
           <ul className="space-y-2">
             <li>
