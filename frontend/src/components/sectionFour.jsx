@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 function SectionFour() {
   const newsData = [
     {
-      date: "March 08, 2018",
+      date: "March 08, 2025",
       title: "About Amazing Technology",
       desc: "Maecenas risus neque, placerat volutpat tempor ut, vehicula et felis.",
       img: news1,
@@ -14,7 +14,7 @@ function SectionFour() {
       role: "CEO / Founder",
     },
     {
-      date: "February 20, 2018",
+      date: "February 20, 2025",
       title: "Introducing a new healing process",
       desc: "Fusce vel sem finibus, rhoncus massa non, aliquam velit. Nam et est ligula.",
       img: news2,
@@ -22,7 +22,7 @@ function SectionFour() {
       role: "General Director",
     },
     {
-      date: "January 27, 2018",
+      date: "January 23, 2025",
       title: "Review Annual Medical Research",
       desc: "Vivamus non nulla semper diam cursus maximus. Pellentesque dignissim.",
       img: news3,
