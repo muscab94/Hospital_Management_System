@@ -32,7 +32,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/services" className="hover:text-white">
+              <Link to="/service" className="hover:text-white">
                 Services
               </Link>
             </li>
@@ -42,7 +42,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/doctors" className="hover:text-white">
+              <Link to="/Doctor" className="hover:text-white">
                 Doctors
               </Link>
             </li>
