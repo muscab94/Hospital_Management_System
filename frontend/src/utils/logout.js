@@ -5,7 +5,7 @@ const handleLogout = async (fn, path) => {
     try {
       // Call your backend logout API
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        "https://hospital-management-system-9rt1.onrender.com/api/auth/logout",
         {},
         {
           headers: {

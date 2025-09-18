@@ -34,7 +34,7 @@ export default function Dashboard() {
   const fetchAllAppointment = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/appointments",
+        "https://hospital-management-system-9rt1.onrender.com/api/appointments",
         getHeaders()
       );
       console.log(res.data);
@@ -46,7 +46,7 @@ export default function Dashboard() {
     const fetchReport = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/reports",
+          "https://hospital-management-system-9rt1.onrender.com/api/reports",
           getHeaders()
         );
         console.log(data);

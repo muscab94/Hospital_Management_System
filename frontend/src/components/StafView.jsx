@@ -12,7 +12,7 @@ export default function StaffView() {
   useEffect(() => {
     const fetchStaffMember = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/staff/${id}`, getHeaders());
+        const res = await axios.get(`https://hospital-management-system-9rt1.onrender.com/api/staff/${id}`, getHeaders());
         setStaff(res.data.data);
       } catch (err) {
         console.error(err);

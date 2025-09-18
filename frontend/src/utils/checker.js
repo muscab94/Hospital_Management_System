@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const checkServer = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/health"); // make a lightweight endpoint
+    const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/health"); // make a lightweight endpoint
     return res.status === 200;
   } catch (err) {
     return false; // server is unreachable

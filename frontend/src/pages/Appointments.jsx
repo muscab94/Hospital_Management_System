@@ -38,7 +38,7 @@ function Appointments() {
   const fetchDoctors = async () => {
     if (user.role === "doctor") return;
     try {
-      const res = await axios.get("http://localhost:5000/api/staff/doctors", {
+      const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/staff/doctors", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDoctors(res.data.data || []);
@@ -51,7 +51,7 @@ function Appointments() {
   // Fetch patients
   const fetchPatients = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/patients", {
+      const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/patients", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPatients(res.data.data || []);
@@ -65,8 +65,8 @@ function Appointments() {
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      let url = "http://localhost:5000/api/appointments";
-      if (user.role === "doctor") url = `http://localhost:5000/api/appointments/doctor/${user.id}`;
+      let url = "https://hospital-management-system-9rt1.onrender.com/api/appointments";
+      if (user.role === "doctor") url = `https://hospital-management-system-9rt1.onrender.com/api/appointments/doctor/${user.id}`;
       if (searchTerm.trim()) url += `?search=${searchTerm}`;
       const res = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
       setAppointments(res.data.data || []);
@@ -81,7 +81,7 @@ function Appointments() {
   // Fetch stats
   const fetchStats = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/appointments/stats", {
+      const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/appointments/stats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStats(res.data.data || null);
@@ -109,7 +109,7 @@ function Appointments() {
     if (!formData.doctorId || !formData.appointmentDate) return;
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/appointments/availability/${formData.doctorId}?date=${formData.appointmentDate}`,
+        `https://hospital-management-system-9rt1.onrender.com/api/appointments/availability/${formData.doctorId}?date=${formData.appointmentDate}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const slots = res.data.data.availableSlots || [];
@@ -127,8 +127,8 @@ function Appointments() {
     try {
       const method = editingAppointment ? "put" : "post";
       const url = editingAppointment
-        ? `http://localhost:5000/api/appointments/${editingAppointment._id}`
-        : "http://localhost:5000/api/appointments";
+        ? `https://hospital-management-system-9rt1.onrender.com/api/appointments/${editingAppointment._id}`
+        : "https://hospital-management-system-9rt1.onrender.com/api/appointments";
 
       const res = await axios({
         method,
@@ -183,7 +183,7 @@ function Appointments() {
               onClick={async () => {
                 toast.dismiss(t.id);
                 try {
-                  await axios.delete(`http://localhost:5000/api/appointments/${id}`, {
+                  await axios.delete(`https://hospital-management-system-9rt1.onrender.com/api/appointments/${id}`, {
                     headers: { Authorization: `Bearer ${token}` },
                   });
                   toast.success("Appointment cancelled successfully");

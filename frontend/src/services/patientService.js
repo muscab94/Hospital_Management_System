@@ -1,7 +1,7 @@
 // src/services/patientService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/patients";
+const API_URL = "https://hospital-management-system-9rt1.onrender.com/api/patients";
 
 // Helper to include token
 const getHeaders = () => {

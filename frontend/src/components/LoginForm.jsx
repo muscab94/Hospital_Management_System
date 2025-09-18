@@ -26,7 +26,7 @@ function LoginForm() {
     try {
       // Send login request to your backend
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://hospital-management-system-9rt1.onrender.com/api/auth/login",
         formData
       );
 

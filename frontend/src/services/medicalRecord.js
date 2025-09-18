@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/medical-records";
+const API_URL = "https://hospital-management-system-9rt1.onrender.com/api/medical-records";
 
 const getTokenHeaders = () => {
   const token = localStorage.getItem("token");

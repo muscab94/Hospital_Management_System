@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/staff';
+const API_URL = 'https://hospital-management-system-9rt1.onrender.com/api/staff';
 
 // Helper function to get headers with token
 export const getHeaders = () => {
@@ -22,8 +22,8 @@ export const fetchStaffStats = () => axios.get(`${API_URL}/stats`, getHeaders())
 
 // Create staff (register)
 export const createStaff = (data) =>
-  axios.post("http://localhost:5000/api/auth/register", data, getHeaders());
+  axios.post("https://hospital-management-system-9rt1.onrender.com/api/auth/register", data, getHeaders());
 
 // Update staff (admin updating staff by ID)
 export const updateStaff = (id, data) =>
-  axios.put(`http://localhost:5000/api/staff/${id}`, data, getHeaders());
+  axios.put(`https://hospital-management-system-9rt1.onrender.com/api/staff/${id}`, data, getHeaders());
