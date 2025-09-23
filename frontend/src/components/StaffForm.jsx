@@ -32,7 +32,7 @@ export default function StaffForm() {
       if (!id) return;
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/staff/${id}`,
+          `https://hospital-management-system-9rt1.onrender.com/api/staff/${id}`,
           getHeaders()
         );
         setFormData({

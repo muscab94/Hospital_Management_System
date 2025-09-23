@@ -11,7 +11,7 @@ const ContactList = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("You must be logged in");
 
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch("https://hospital-management-system-9rt1.onrender.com/api/contact", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const ContactList = () => {
                 toast.dismiss(t.id); // remove the toast
                 try {
                   const token = localStorage.getItem("token");
-                  const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+                  const res = await fetch(`https://hospital-management-system-9rt1.onrender.com/api/contact/${id}`, {
                     method: "DELETE",
                     headers: {
                       "Content-Type": "application/json",

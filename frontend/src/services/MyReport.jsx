@@ -28,7 +28,7 @@ const reports = () => {
   useEffect(() => {
     const fetchReport = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/reports", getHeaders());
+        const { data } = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/reports", getHeaders());
         console.log(data.data)
         setReport(data.data);
         setLoading(false);

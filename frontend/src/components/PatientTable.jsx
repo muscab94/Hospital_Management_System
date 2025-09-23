@@ -28,7 +28,7 @@ function PatientTable() {
         const userData = JSON.parse(localStorage.getItem("user"));
         setUser(userData);
 
-        const res = await axios.get("http://localhost:5000/api/patients", {
+        const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/patients", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -50,7 +50,7 @@ function PatientTable() {
     const token = localStorage.getItem("token");
 
     if (!term.trim()) {
-      const res = await axios.get("http://localhost:5000/api/patients", {
+      const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/patients", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPatients(res.data.data);
@@ -59,7 +59,7 @@ function PatientTable() {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/patients/search/${term}`,
+        `https://hospital-management-system-9rt1.onrender.com/api/patients/search/${term}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setPatients(res.data.data);
@@ -79,7 +79,7 @@ function PatientTable() {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:5000/api/patients/${id}`, {
+      await axios.delete(`https://hospital-management-system-9rt1.onrender.com/api/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPatients((prev) => prev.filter((p) => p._id !== id));

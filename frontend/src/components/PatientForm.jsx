@@ -28,7 +28,7 @@ function PatientForm() {
     const fetchDepartments = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/departments", {
+        const res = await axios.get("https://hospital-management-system-9rt1.onrender.com/api/departments", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setDepartments(res.data.data);
@@ -47,7 +47,7 @@ function PatientForm() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `http://localhost:5000/api/patients/${patientId}`,
+          `https://hospital-management-system-9rt1.onrender.com/api/patients/${patientId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -84,8 +84,8 @@ function PatientForm() {
     try {
       const token = localStorage.getItem("token");
       const url = patientId
-        ? `http://localhost:5000/api/patients/${patientId}`
-        : "http://localhost:5000/api/patients";
+        ? `https://hospital-management-system-9rt1.onrender.com/api/patients/${patientId}`
+        : "https://hospital-management-system-9rt1.onrender.com/api/patients";
       const method = patientId ? "PUT" : "POST";
 
       await axios({
