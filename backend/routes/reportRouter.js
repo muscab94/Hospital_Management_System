@@ -8,6 +8,6 @@ const router = express.Router();
 router.use(protect);
 
 // Only admin and receptionist can view full report
-router.get('/', authorize('admin', 'receptionist'), getReport);
+router.get('/', authorize('admin', 'doctor', 'receptionist'), getReport);
 
 export default router;

@@ -44,12 +44,12 @@ function SideBar() {
       icon: <CalendarCheck className="w-5 h-5" />,
       roles: ["admin", "doctor", "receptionist"],
     },
-    {
-      to: "/Dashboard/medical-records",
-      label: "Medical Records",
-      icon: <FileText className="w-5 h-5" />,
-      roles: ["admin", "doctor"], // only admin + doctor
-    },
+    // {
+    //   to: "/Dashboard/medical-records",
+    //   label: "Medical Records",
+    //   icon: <FileText className="w-5 h-5" />,
+    //   roles: ["admin", "doctor"], // only admin + doctor
+    // },
     {
       to: "/Dashboard/staffs",
       label: "Staff Management",

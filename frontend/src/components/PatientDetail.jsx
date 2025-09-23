@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft, Phone, Mail, MapPin, User } from "lucide-react";
+import { calculateAge } from "../utils/checker";
 
 function PatientDetail() {
   const { id } = useParams();
@@ -63,7 +64,7 @@ function PatientDetail() {
                 <User size={16} /> Gender: {patient.gender}
               </li>
               <li>Date of Birth: {patient.dateOfBirth?.split("T")[0]}</li>
-              <li>Age: {patient.age}</li>
+              <li>Age: {calculateAge(patient.dateOfBirth)}</li>
               <li>Blood Group: {patient.bloodGroup}</li>
               <li>
                 Status:{" "}

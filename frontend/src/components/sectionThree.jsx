@@ -45,33 +45,38 @@ function SectionThree() {
   }, [hasCounted]);
 
   return (
-    <div ref={sectionRef}>
-      <div className="w-full h-72 my-20 bg-gray- flex items-center justify-between px-20">
-        <div className="bg-white w-60 h-[140px] relative">
-          <i className="fa-solid fa-user-doctor absolute left-24 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-4 pr-10 rounded-full"></i>
-          <h1 className="text-center pt-8 font-bold text-[2em]">{doctors}</h1>
-          <p className="text-center text-[1.1em] pt-3">Doctors</p>
-        </div>
-
-        <div className="bg-white w-60 h-[140px] relative">
-          <i className="fa-solid fa-hospital absolute left-24 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-4 pr-10 rounded-full"></i>
-          <h1 className="text-center pt-8 font-bold text-[2em]">{departments}</h1>
-          <p className="text-center text-[1.1em] pt-3">Departments</p>
-        </div>
-
-        <div className="bg-white w-60 h-[140px] relative">
-          <i className="fa-solid fa-flask absolute left-24 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-4 pr-10 rounded-full"></i>
-          <h1 className="text-center pt-8 font-bold text-[2em]">{labs}</h1>
-          <p className="text-center text-[1.1em] pt-3">Research Labs</p>
-        </div>
-
-        <div className="bg-white w-60 h-[140px] relative">
-          <i className="fa-solid fa-award absolute left-24 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-4 pr-10 rounded-full"></i>
-          <h1 className="text-center pt-8 font-bold text-[2em]">{awards}</h1>
-          <p className="text-center text-[1.1em] pt-3">Awards</p>
-        </div>
-      </div>
+   <div ref={sectionRef} className="my-20 px-6">
+  <div className="w-full bg-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {/* Doctors */}
+    <div className="bg-white w-full h-[140px] relative rounded-lg shadow-md">
+      <i className="fa-solid fa-user-doctor absolute left-1/2 -translate-x-1/2 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-5 rounded-full"></i>
+      <h1 className="text-center pt-8 font-bold text-[2em]">{doctors}</h1>
+      <p className="text-center text-[1.1em] pt-3">Doctors</p>
     </div>
+
+    {/* Departments */}
+    <div className="bg-white w-full h-[140px] relative rounded-lg shadow-md">
+      <i className="fa-solid fa-hospital absolute left-1/2 -translate-x-1/2 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-5 rounded-full"></i>
+      <h1 className="text-center pt-8 font-bold text-[2em]">{departments}</h1>
+      <p className="text-center text-[1.1em] pt-3">Departments</p>
+    </div>
+
+    {/* Research Labs */}
+    <div className="bg-white w-full h-[140px] relative rounded-lg shadow-md">
+      <i className="fa-solid fa-flask absolute left-1/2 -translate-x-1/2 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-5 rounded-full"></i>
+      <h1 className="text-center pt-8 font-bold text-[2em]">{labs}</h1>
+      <p className="text-center text-[1.1em] pt-3">Research Labs</p>
+    </div>
+
+    {/* Awards */}
+    <div className="bg-white w-full h-[140px] relative rounded-lg shadow-md">
+      <i className="fa-solid fa-award absolute left-1/2 -translate-x-1/2 -top-8 bg-blue-700 text-[1.5em] text-white py-4 px-5 rounded-full"></i>
+      <h1 className="text-center pt-8 font-bold text-[2em]">{awards}</h1>
+      <p className="text-center text-[1.1em] pt-3">Awards</p>
+    </div>
+  </div>
+</div>
+
   );
 }
 

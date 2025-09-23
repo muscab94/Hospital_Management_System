@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, Plus, Eye, Edit, Trash2, Phone, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { calculateAge } from "../utils/checker";
 
 function PatientTable() {
   const navigate = useNavigate();
@@ -10,6 +11,10 @@ function PatientTable() {
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+
+
+
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -153,7 +158,7 @@ function PatientTable() {
                     <MapPin size={14} /> {patient.address}
                   </div>
                 </td>
-                <td className="p-4">{patient.age}</td>
+                <td className="p-4">{calculateAge(patient.dateOfBirth)}</td>
                 <td className="p-4">
                   <span className="px-2 py-1 text-xs rounded-full border">
                     {patient.bloodGroup}

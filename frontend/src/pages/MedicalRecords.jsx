@@ -1,7 +1,7 @@
 // src/pages/MedicalRecordsList.jsx
 import { useState, useEffect } from "react";
 import { getMedicalRecords, createMedicalRecord } from "../services/medicalRecord";
-import { fetchPatients } from "../services/patientService"; // use service
+import { fetchPatients } from "../services/patientService"; // use service 
 import { fetchDoctors } from "../services/staffService";
 import toast from "react-hot-toast";
 
@@ -11,11 +11,20 @@ export default function MedicalRecordsList() {
   const [doctors, setDoctors] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [showForm, setShowForm] = useState(false);
+  const [user, setUser] = useState(null);
+ 
+  useEffect(() => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+  },[])
+  useEffect(() => {
+   
+     console.log(user)
+  }, [])
+
   const [newRecord, setNewRecord] = useState({
     patientId: "",
-    doctorId: "",
+    doctorId: JSON.parse(localStorage.getItem("user")),
     diagnosis: "",
     treatment: "",
   });
@@ -44,11 +53,12 @@ export default function MedicalRecordsList() {
       try {
         // ✅ Fetch patients using patientService
         const patientsRes = await fetchPatients();
+        console.log(patientsRes.data.data)
         setPatients(patientsRes.data.data);
 
         // Fetch doctors
-        const doctorsRes = await fetchDoctors();
-        setDoctors(doctorsRes.data.data);
+        // const doctorsRes = await fetchDoctors();
+        // setDoctors(doctorsRes.data.data);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load patients or doctors");
@@ -106,13 +116,13 @@ export default function MedicalRecordsList() {
               <option value="">Select Patient</option>
               {patients.map((p) => (
                 <option key={p._id} value={p._id}>
-                  {p.firstName} {p.lastName}
+                  {p.fullName}
                 </option>
               ))}
             </select>
           </div>
 
-          <div>
+          {/* <div>
             <label className="block mb-1 font-medium">Doctor</label>
             <select
               value={newRecord.doctorId}
@@ -129,7 +139,7 @@ export default function MedicalRecordsList() {
                 </option>
               ))}
             </select>
-          </div>
+          </div> */}
 
           <div>
             <label className="block mb-1 font-medium">Diagnosis</label>
